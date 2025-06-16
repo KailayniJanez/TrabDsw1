@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><title>Upload de Currículo</title></head>
+<body>
+<h1>Enviar Currículo</h1>
+<form method="post" enctype="multipart/form-data" th:action="@{/upload}">
+    <input type="file" name="file" />
+    <button type="submit">Enviar</button>
+</form>
+<p th:text="${message}"></p>
+</body>
+</html>

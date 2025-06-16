@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Cadastro de Empresa</title>
+</head>
+<body>
+<h1>Cadastro de Empresa</h1>
+<form th:action="@{/admin/empresas}" th:object="${empresa}" method="post">
+    <input type="hidden" th:field="*{id}" />
+    Email: <input type="text" th:field="*{email}" /><br/>
+    Senha: <input type="password" th:field="*{senha}" /><br/>
+    CNPJ: <input type="text" th:field="*{cnpj}" /><br/>
+    Nome: <input type="text" th:field="*{nome}" /><br/>
+    Descrição: <input type="text" th:field="*{descricao}" /><br/>
+    Cidade: <input type="text" th:field="*{cidade}" /><br/>
+    <button type="submit">Salvar</button>
+</form>
+<a th:href="@{/admin/empresas}">Voltar</a>
+</body>
+</html>
