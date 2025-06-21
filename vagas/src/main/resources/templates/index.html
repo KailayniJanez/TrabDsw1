@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Início</title>
+</head>
+<body>
+<h1>Bem-vindo ao Sistema de Vagas</h1>
+
+<p><a th:href="@{/login}">Entrar</a></p>
+
+<h2>Vagas em Aberto</h2>
+<ul>
+    <li th:each="vaga : ${vagas}">
+        <strong th:text="${vaga.descricao}">Descrição</strong><br/>
+        Remuneração: <span th:text="${vaga.remuneracao}"></span><br/>
+        Cidade: <span th:text="${vaga.empresa.cidade}">Cidade</span><br/>
+        <hr/>
+    </li>
+</ul>
+
+</body>
+</html>

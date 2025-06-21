@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><title>Início</title></head>
+<body>
+<h1>Administrador</h1>
+
+<ul>
+    <li><a th:href="@{/admin/empresas}">Empresas</a></li>
+    <li><a th:href="@{/admin/profissionais}">Profissionais</a></li>
+</ul>
+
+<a th:href="@{/logout}">Sair</a>
+</body>
+</html>

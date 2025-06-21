@@ -19,7 +19,7 @@ public class Vaga {
 
     private BigDecimal remuneracao;
 
-    private LocalDate dataLimite;
+    private LocalDate dataLimiteInscricao;
 
     private String cidade;
 
@@ -56,12 +56,12 @@ public class Vaga {
         this.remuneracao = remuneracao;
     }
 
-    public LocalDate getDataLimite() {
-        return dataLimite;
+    public LocalDate getDataLimiteInscricao() {
+        return dataLimiteInscricao;
     }
 
-    public void setDataLimite(LocalDate dataLimite) {
-        this.dataLimite = dataLimite;
+    public void setDataLimiteInscricao(LocalDate dataLimiteInscricao) {
+        this.dataLimiteInscricao = dataLimiteInscricao;
     }
 
     public String getCidade() {

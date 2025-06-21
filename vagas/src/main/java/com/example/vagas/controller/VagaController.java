@@ -22,8 +22,8 @@ public class VagaController {
     @GetMapping
     public String listarVagas(Model model, @RequestParam(required = false) String cidade) {
         List<Vaga> vagas = (cidade == null || cidade.isEmpty()) ?
-            vagaRepository.findByDataLimiteAfter(LocalDate.now()) :
-            vagaRepository.findByCidadeAndDataLimiteAfter(cidade, LocalDate.now());
+            vagaRepository.findByDataLimiteInscricaoAfter(LocalDate.now()) :
+            vagaRepository.findByCidadeAndDataLimiteInscricaoAfter(cidade, LocalDate.now());
 
         model.addAttribute("vagas", vagas);
         return "vagas/listagem";
