@@ -16,7 +16,10 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/vagas/**", "/login", "/css/**", "/js/**").permitAll()
+                .requestMatchers("/vagas/**", "/images/**", "/login", "/css/**", "/js/**").permitAll() // Faltam esses arquivos "/login", "/css/**", "/js/**
+                .requestMatchers("/admin/**").hasRole("ADMIN")
+                .requestMatchers("/profissional/**").hasRole("PROFISSIONAL")
+                .requestMatchers("/empresa/**").hasRole("EMPRESA")
                 .anyRequest().authenticated() // protege tudo que não foi explicitamente liberado
             )
             .formLogin(form -> form
@@ -38,7 +41,21 @@ public class SecurityConfig {
             .password("{noop}admin")
             .roles("ADMIN")
             .build();
-        return new InMemoryUserDetailsManager(admin);
+
+        UserDetails profissional = User.builder()
+            .username("prof@prof.com")
+            .password("{noop}prof")
+            .roles("PROFISSIONAL")
+            .build();
+
+        UserDetails empresa = User.builder()
+            .username("empresa@empresa.com")
+            .password("{noop}empresa")
+            .roles("EMPRESA")
+            .build();
+
+        return new InMemoryUserDetailsManager(admin, profissional, empresa);    
+        
     }
 }
 
