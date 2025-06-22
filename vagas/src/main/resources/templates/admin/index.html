@@ -1,14 +1,17 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head><meta charset="UTF-8"><title>Início</title></head>
-<body>
-<h1>Administrador</h1>
+    <body>
+        <h1>Administrador</h1>
 
-<ul>
-    <li><a th:href="@{/admin/empresas}">Empresas</a></li>
-    <li><a th:href="@{/admin/profissionais}">Profissionais</a></li>
-</ul>
+        <ul>
+            <li><a th:href="@{/admin/empresas}">Empresas</a></li>
+            <li><a th:href="@{/admin/profissionais}">Profissionais</a></li>
+        </ul>
 
-<a th:href="@{/logout}">Sair</a>
-</body>
+        <form th:action="@{/logout}" method="post" style="display:inline;">
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+            <button type="submit">Sair</button>
+        </form>
+    </body>
 </html>

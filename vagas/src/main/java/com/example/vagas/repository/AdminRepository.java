@@ -1,7 +1,8 @@
 package com.example.vagas.repository;
 
-import com.example.vagas.domain.Admin;
 import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.example.vagas.model.Admin;
 
 import java.util.Optional;
 

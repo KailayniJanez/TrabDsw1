@@ -1,6 +1,6 @@
 package com.example.vagas;
 
-import com.example.vagas.domain.Admin;
+import com.example.vagas.model.Admin;
 import com.example.vagas.repository.AdminRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -21,7 +21,7 @@ public class VagasApplication {
             if (!repo.existsByEmail("admin@admin.com")) {
                 Admin admin = new Admin();
                 admin.setEmail("admin@admin.com");
-                admin.setSenha(encoder.encode("admin")); // Senha segura
+                admin.setSenha(encoder.encode("admin"));
                 repo.save(admin);
             }
         };

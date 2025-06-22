@@ -28,5 +28,12 @@ public class VagaController {
         model.addAttribute("vagas", vagas);
         return "vagas/listagem";
     }
+
+    @GetMapping("/index")
+    public String indexEmpresa(Model model) {
+        List<Vaga> vagas = vagaRepository.findByDataLimiteInscricaoAfter(LocalDate.now()); // Preciso implementar para exibir somente da empresa em questao
+        model.addAttribute("vagas", vagas);
+        return "vagas/index"; 
+}
 }
 

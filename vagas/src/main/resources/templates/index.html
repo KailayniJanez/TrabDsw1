@@ -7,6 +7,10 @@
 <body>
 <h1>Bem-vindo ao Sistema de Vagas</h1>
 
+<div th:if="${param.logout}">
+  <p style="color: green;">Você saiu com sucesso.</p>
+</div>
+
 <p><a th:href="@{/login}">Entrar</a></p>
 
 <h2>Vagas em Aberto</h2>
