@@ -22,11 +22,18 @@ public class VagaController {
     @GetMapping
     public String listarVagas(Model model, @RequestParam(required = false) String cidade) {
         List<Vaga> vagas = (cidade == null || cidade.isEmpty()) ?
-            vagaRepository.findByDataLimiteAfter(LocalDate.now()) :
-            vagaRepository.findByCidadeAndDataLimiteAfter(cidade, LocalDate.now());
+            vagaRepository.findByDataLimiteInscricaoAfter(LocalDate.now()) :
+            vagaRepository.findByCidadeAndDataLimiteInscricaoAfter(cidade, LocalDate.now());
 
         model.addAttribute("vagas", vagas);
         return "vagas/listagem";
     }
+
+    @GetMapping("/index")
+    public String indexEmpresa(Model model) {
+        List<Vaga> vagas = vagaRepository.findByDataLimiteInscricaoAfter(LocalDate.now()); // Preciso implementar para exibir somente da empresa em questao
+        model.addAttribute("vagas", vagas);
+        return "vagas/index"; 
+}
 }
 

@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Controller
 @RequestMapping("/admin/empresas")
@@ -13,6 +14,9 @@ public class EmpresaController {
 
     @Autowired
     private EmpresaRepository empresaRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @GetMapping
     public String listar(Model model) {
@@ -26,8 +30,19 @@ public class EmpresaController {
         return "empresas/form";
     }
 
-    @PostMapping
+     @PostMapping
     public String salvar(@ModelAttribute Empresa empresa) {
+        if (empresa.getId() == null) {
+            empresa.setSenha(passwordEncoder.encode(empresa.getSenha()));
+        } else {
+            Empresa existente = empresaRepository.findById(empresa.getId()).orElseThrow();
+            if (empresa.getSenha() == null || empresa.getSenha().isEmpty()) {
+                empresa.setSenha(existente.getSenha());
+            } else {
+                empresa.setSenha(passwordEncoder.encode(empresa.getSenha()));
+            }
+        }
+
         empresaRepository.save(empresa);
         return "redirect:/admin/empresas";
     }

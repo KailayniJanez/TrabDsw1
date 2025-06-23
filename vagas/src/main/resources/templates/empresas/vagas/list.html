@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Minhas Vagas</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" th:href="@{/empresa/dashboard}">Minha Empresa</a>
+            <form th:action="@{/logout}" method="post" class="ms-auto">
+                <button type="submit" class="btn btn-light">Sair</button>
+            </form>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1>Minhas Vagas</h1>
+            <a th:href="@{/empresa/vagas/form}" class="btn btn-primary">
+                <i class="bi bi-plus-lg"></i> Nova Vaga
+            </a>
+        </div>
+
+        <div class="card shadow">
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Descrição</th>
+                                <th>Remuneração</th>
+                                <th>Data Limite</th>
+                                <th>Candidaturas</th>
+                                <th class="text-end">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="vaga : ${vagas}">
+                                <td th:text="${vaga.descricao}"></td>
+                                <td th:text="${'R$ ' + #numbers.formatDecimal(vaga.remuneracao, 1, 2, 'POINT')}"></td>
+                                <td th:text="${#temporals.format(vaga.dataLimiteInscricao, 'dd/MM/yyyy')}"></td>
+                                <td>
+                                    <a th:href="@{/empresa/vagas/{id}/candidaturas(id=${vaga.id})}" 
+                                       class="badge bg-primary text-decoration-none">
+                                        Ver <span th:text="${vaga.candidaturas.size()}"></span>
+                                    </a>
+                                </td>
+                                <td class="text-end">
+                                    <a th:href="@{/empresa/vagas/editar/{id}(id=${vaga.id})}" 
+                                       class="btn btn-sm btn-outline-primary me-2">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
