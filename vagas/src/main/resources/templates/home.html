@@ -1,16 +1,21 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head><meta charset="UTF-8"><title>Início</title></head>
+<head>
+    <meta charset="UTF-8">
+    <title th:text="#{app.title}"></title> </head>
 <body>
-<h1>Bem-vindo ao Sistema de Vagas</h1>
+    <h1 th:text="#{welcome.message}"></h1> <ul>
+        <li><a th:href="@{/vagas}" th:text="#{menu.viewVagas}"></a></li>
+        <li><a th:href="@{/admin/empresas}" th:text="#{menu.companiesAdmin}"></a></li>
+        <li><a th:href="@{/admin/profissionais}" th:text="#{menu.professionalsAdmin}"></a></li>
+        <li><a th:href="@{/upload}" th:text="#{menu.uploadResume}"></a></li>
+    </ul>
 
-<ul>
-    <li><a th:href="@{/vagas}">Ver Vagas</a></li>
-    <li><a th:href="@{/admin/empresas}">Empresas (admin)</a></li>
-    <li><a th:href="@{/admin/profissionais}">Profissionais (admin)</a></li>
-    <li><a th:href="@{/upload}">Upload de Currículo</a></li>
-</ul>
+    <a th:href="@{/logout}" th:text="#{menu.logout}"></a>
 
-<a th:href="@{/logout}">Sair</a>
+    <div style="margin-top: 20px;">
+        <a th:href="@{/(lang=pt)}" th:text="#{lang.portuguese}"></a> |
+        <a th:href="@{/(lang=en)}" th:text="#{lang.english}"></a>
+    </div>
 </body>
 </html>

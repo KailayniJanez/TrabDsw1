@@ -2,9 +2,11 @@ package com.example.vagas.controller;
 
 import com.example.vagas.model.Profissional;
 import com.example.vagas.repository.ProfissionalRepository;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
@@ -26,10 +28,15 @@ public class ProfissionalController {
         return "profissionais/form";
     }
 
-    @PostMapping
-    public String salvar(@ModelAttribute Profissional profissional) {
+    @PostMapping // O método 'salvar' será alterado
+    public String salvar(@Valid @ModelAttribute Profissional profissional, BindingResult result, Model model) {
+        if (result.hasErrors()) {
+            // Se houver erros de validação, retorna para o mesmo formulário
+            return "profissionais/form";
+        }
+        // Se não houver erros, salva o profissional no banco de dados
         profissionalRepository.save(profissional);
-        return "redirect:/admin/profissionais";
+        return "redirect:/admin/profissionais"; // Redireciona para a listagem
     }
 
     @GetMapping("/editar/{id}")
@@ -44,4 +51,5 @@ public class ProfissionalController {
         return "redirect:/admin/profissionais";
     }
 }
+
 

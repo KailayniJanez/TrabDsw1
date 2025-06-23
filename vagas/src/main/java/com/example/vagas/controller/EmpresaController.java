@@ -2,9 +2,11 @@ package com.example.vagas.controller;
 
 import com.example.vagas.model.Empresa;
 import com.example.vagas.repository.EmpresaRepository;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
@@ -26,10 +28,15 @@ public class EmpresaController {
         return "empresas/form";
     }
 
-    @PostMapping
-    public String salvar(@ModelAttribute Empresa empresa) {
+    @PostMapping // O método 'salvar' foi alterado
+    public String salvar(@Valid @ModelAttribute Empresa empresa, BindingResult result, Model model) {
+        if (result.hasErrors()) {
+            // Se houver erros de validação, retorna para o mesmo formulário
+            return "empresas/form";
+        }
+        // Se não houver erros, salva a empresa no banco de dados
         empresaRepository.save(empresa);
-        return "redirect:/admin/empresas";
+        return "redirect:/admin/empresas"; // Redireciona para a listagem
     }
 
     @GetMapping("/editar/{id}")
