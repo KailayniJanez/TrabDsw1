@@ -79,6 +79,21 @@ O sistema envia e-mails automáticos aos candidatos quando seu status de candida
 
 
 - **Kailayni Janez:**  
-  _[A definir]_
+  Responsável pelo desenvolvimento das principais funcionalidades do sistema e integração front-end/back-end, incluindo:
+  - Desenvolvimento de CRUDs completos:
+      - Implementaçãol de cadastro/gestão de vagas (R3)
+      - Criação do sistema de candidaturas com upload de currículos (R5)
+      - Desenvolvimento de painéis administrativos (R1, R2)
+  - Lógica de negócio avançada:
+      - Implementação do fluxo completo de candidaturas (R5-R8)
+      - Validações complexas de datas e regras de negócio
+      - Filtros e consultas personalizadas para listagens
+  - Integração front-en/back-end:
+      - Desenvolvimento de templates Thymeleaf responsivos
+      - Implementação de interfaces intuitivas para todos os perfis de usuário
+      - Integração de componentes Bootstrap com lógica Spring MVC
+  -Sistema de notificações:
+      - Configuração do serviço de e-mails para atualizações de status (R8)
+      - Implementação de feedback visual para ações do usuário
 
 ---
