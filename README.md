@@ -49,7 +49,7 @@ A estrutura segue o padrão de projetos Spring Boot, com pacotes separados para 
 
 O sistema está preparado para exibir a interface em pelo menos dois idiomas:
 - Português (pt-BR)
-- [Idioma secundário a definir]
+-  Inglês (en)
 
 ## Notificações
 
@@ -75,10 +75,10 @@ O sistema envia e-mails automáticos aos candidatos quando seu status de candida
 
 - **Brenda Maia:**  
   Responsável pelo Suporte de internacionalização (PT + Inglês) e a Validação e tratamento de erros, incluindo:
-  - internacionalização das páginas funcionais (R9)
+  - Internacionalização das páginas funcionais (R9)
   - Validação dos dados presentes nos formulários (10)
   - Ajustes nos erros de mensagens e botões
-  - Implementação das mensagens de idiomas (inglês e portugués) (R9)
+  - Implementação das mensagens de idiomas (inglês e português) (R9)
 
 
 - **Kailayni Janez:**  
