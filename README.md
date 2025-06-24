@@ -100,3 +100,6 @@ O sistema envia e-mails automáticos aos candidatos quando seu status de candida
       - Implementação de feedback visual para ações do usuário
 
 ---
+## Acesso ao administrador
+- Email: admin@admin.com
+- Senha: admin
