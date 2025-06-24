@@ -2,8 +2,10 @@ package com.example.vagas.security;
 
 import com.example.vagas.model.Admin;
 import com.example.vagas.model.Empresa;
+import com.example.vagas.model.Profissional;
 import com.example.vagas.repository.AdminRepository;
 import com.example.vagas.repository.EmpresaRepository;
+import com.example.vagas.repository.ProfissionalRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.*;
 import org.springframework.stereotype.Service;
@@ -17,7 +19,9 @@ public class UsuarioDetailsService implements UserDetailsService {
 
     @Autowired
     private EmpresaRepository empresaRepo;
-
+    
+    @Autowired
+    private ProfissionalRepository profissionalRepo;
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
@@ -37,6 +41,15 @@ public class UsuarioDetailsService implements UserDetailsService {
             return User.withUsername(empresa.getEmail())
                     .password(empresa.getSenha())
                     .roles("EMPRESA")
+                    .build();
+        }
+        
+        Optional<Profissional> profissionalOpt = profissionalRepo.findByEmail(email);
+        if (profissionalOpt.isPresent()) {
+            Profissional profissional = profissionalOpt.get();
+            return User.withUsername(profissional.getEmail())
+                    .password(profissional.getSenha())
+                    .roles("PROFISSIONAL")
                     .build();
         }
 

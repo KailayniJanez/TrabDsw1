@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Controller
-@RequestMapping("/admin/empresas")
+@RequestMapping("admin/empresas")
 public class EmpresaController {
 
     @Autowired
@@ -18,7 +18,7 @@ public class EmpresaController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    @GetMapping
+    @GetMapping("/list")
     public String listar(Model model) {
         model.addAttribute("empresas", empresaRepository.findAll());
         return "empresas/list";
@@ -30,7 +30,7 @@ public class EmpresaController {
         return "empresas/form";
     }
 
-     @PostMapping
+    @PostMapping
     public String salvar(@ModelAttribute Empresa empresa) {
         if (empresa.getId() == null) {
             empresa.setSenha(passwordEncoder.encode(empresa.getSenha()));
