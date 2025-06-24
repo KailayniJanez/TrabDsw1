@@ -28,7 +28,7 @@ Desenvolver um sistema web para oferta de vagas de estágios e empregos, utiliza
 - **R6:** Visualização de vagas por empresa logada
 - **R7:** Visualização de candidaturas por profissional logado
 - **R8:** Análise de candidaturas e envio de e-mails com status
-- **R9:** Suporte à internacionalização (PT + outro idioma)
+- **R9:** Suporte à internacionalização (PT + Inglês)
 - **R10:** Validação e tratamento de erros
 
 ### Requisitos Técnicos
@@ -74,7 +74,9 @@ O sistema envia e-mails automáticos aos candidatos quando seu status de candida
   - Desenvolvimento de **funcionalidades no back-end** para integração final do sistema
 
 - **Brenda Maia:**  
-  _[A definir]_
+  Responsável pelo Suporte de internacionalização (PT + Inglês)
+  Validação e tratamento de erros
+
 
 - **Kailayni Janez:**  
   _[A definir]_
