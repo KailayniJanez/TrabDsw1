@@ -74,8 +74,11 @@ O sistema envia e-mails automáticos aos candidatos quando seu status de candida
   - Desenvolvimento de **funcionalidades no back-end** para integração final do sistema
 
 - **Brenda Maia:**  
-  Responsável pelo Suporte de internacionalização (PT + Inglês)
-  Validação e tratamento de erros
+  Responsável pelo Suporte de internacionalização (PT + Inglês) e a Validação e tratamento de erros, incluindo:
+  - internacionalização das páginas funcionais (R9)
+  - Validação dos dados presentes nos formulários (10)
+  - Ajustes nos erros de mensagens e botões
+  - Implementação das mensagens de idiomas (inglês e portugués) (R9)
 
 
 - **Kailayni Janez:**  
