@@ -95,9 +95,12 @@ O sistema envia e-mails automáticos aos candidatos quando seu status de candida
       - Desenvolvimento de templates Thymeleaf responsivos
       - Implementação de interfaces intuitivas para todos os perfis de usuário
       - Integração de componentes Bootstrap com lógica Spring MVC
-  -Sistema de notificações:
+  - Sistema de notificações:
       - Configuração do serviço de e-mails para atualizações de status (R8)
       - Implementação de feedback visual para ações do usuário
+  - Otimização de performance:
+      - Tratamento eficiente de upload de arquivos
+      - Consultas JPA otimizadas para listagens complexas
 
 ---
 ## Acesso ao administrador
