@@ -28,7 +28,7 @@ public class Candidatura {
     private String curriculoNome;
     
     @Lob
-    @Column(nullable = false, length = 1048576) // 1MB
+    @Column(nullable = false, length = 1048576)
     private byte[] curriculo;
     
     @Enumerated(EnumType.STRING)
@@ -126,7 +126,6 @@ public class Candidatura {
         this.linkEntrevista = linkEntrevista;
     }
 
-    // Métodos auxiliares
     @Override
     public String toString() {
         return "Candidatura{" +

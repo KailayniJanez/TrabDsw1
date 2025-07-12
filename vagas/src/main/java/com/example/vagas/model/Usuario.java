@@ -16,7 +16,7 @@ import java.util.List;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-public abstract class Usuario implements UserDetails { // Implementa UserDetails
+public abstract class Usuario implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -71,10 +71,10 @@ public abstract class Usuario implements UserDetails { // Implementa UserDetails
     }
     public String getRole() { 
         return role; 
-    } // Getter para o novo campo role
+    } 
     public void setRole(String role) { 
         this.role = role; 
-    } // Setter para o novo campo role
+    } 
 
     @Override
     public String toString() {
@@ -89,7 +89,6 @@ public abstract class Usuario implements UserDetails { // Implementa UserDetails
     // Implementações de UserDetails
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        // Retorna a role do usuário. Ex: "ROLE_ADMIN", "ROLE_EMPRESA", "ROLE_PROFISSIONAL"
         return List.of(new SimpleGrantedAuthority(this.role));
     }
 
@@ -103,7 +102,6 @@ public abstract class Usuario implements UserDetails { // Implementa UserDetails
         return this.email;
     }
 
-    // Métodos padrão do UserDetails (podem ser true por default para a maioria dos casos)
     @Override
     public boolean isAccountNonExpired() { 
         return true; 

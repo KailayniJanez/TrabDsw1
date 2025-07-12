@@ -8,9 +8,9 @@ import java.time.LocalDate;
 
 
 @Entity
-@Table(name = "profissional") // Mapeia para a tabela 'profissional'
-@PrimaryKeyJoinColumn(name = "id") // Chave primária de Profissional também é FK para Usuario
-public class Profissional extends Usuario { // Profissional agora estende apenas Usuario
+@Table(name = "profissional") 
+@PrimaryKeyJoinColumn(name = "id") 
+public class Profissional extends Usuario { 
 
     @Column(unique = true, nullable = false)
     private String cpf;
@@ -20,12 +20,11 @@ public class Profissional extends Usuario { // Profissional agora estende apenas
     private LocalDate dataNascimento;
 
     public Profissional() {
-        super(); // Chama construtor padrão da superclasse
-        this.setRole("ROLE_PROFISSIONAL"); // Define a role específica para Profissionais
+        super();
+        this.setRole("ROLE_PROFISSIONAL");
     }
 
     public Profissional(String email, String senha, String nome, String cpf, String telefone, String sexo, LocalDate dataNascimento) {
-        // Chama construtor parametrizado da superclasse, passando a role
         super(email, senha, nome, "ROLE_PROFISSIONAL");
         this.cpf = cpf;
         this.telefone = telefone;
@@ -33,7 +32,7 @@ public class Profissional extends Usuario { // Profissional agora estende apenas
         this.dataNascimento = dataNascimento;
     }
 
-    // Getters e Setters específicos de Profissional
+    // Getters e Setters de Profissional
     public String getCpf() { 
         return cpf; 
     }
@@ -59,8 +58,4 @@ public class Profissional extends Usuario { // Profissional agora estende apenas
         this.dataNascimento = dataNascimento; 
     }
 
-    // Os métodos de UserDetails (getAuthorities, getPassword, getUsername, etc.)
-    // são agora herdados diretamente de Usuario. Não precisam ser sobrescritos aqui,
-    // a menos que haja um comportamento muito específico para Profissional.
-    // O getAuthorities em Usuario já retornará "ROLE_PROFISSIONAL" porque o construtor o define.
 }
