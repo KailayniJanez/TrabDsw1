@@ -2,21 +2,23 @@ package com.example.vagas.controller;
 
 import com.example.vagas.model.Empresa;
 import com.example.vagas.repository.EmpresaRepository;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Controller
-@RequestMapping("/admin/empresas")
+@RequestMapping("admin/empresas")
 public class EmpresaController {
 
     @Autowired
     private EmpresaRepository empresaRepository;
 
-    @GetMapping
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @GetMapping("/list")
     public String listar(Model model) {
         model.addAttribute("empresas", empresaRepository.findAll());
         return "empresas/list";
@@ -28,15 +30,21 @@ public class EmpresaController {
         return "empresas/form";
     }
 
-    @PostMapping // O método 'salvar' foi alterado
-    public String salvar(@Valid @ModelAttribute Empresa empresa, BindingResult result, Model model) {
-        if (result.hasErrors()) {
-            // Se houver erros de validação, retorna para o mesmo formulário
-            return "empresas/form";
+    @PostMapping
+    public String salvar(@ModelAttribute Empresa empresa) {
+        if (empresa.getId() == null) {
+            empresa.setSenha(passwordEncoder.encode(empresa.getSenha()));
+        } else {
+            Empresa existente = empresaRepository.findById(empresa.getId()).orElseThrow();
+            if (empresa.getSenha() == null || empresa.getSenha().isEmpty()) {
+                empresa.setSenha(existente.getSenha());
+            } else {
+                empresa.setSenha(passwordEncoder.encode(empresa.getSenha()));
+            }
         }
-        // Se não houver erros, salva a empresa no banco de dados
+
         empresaRepository.save(empresa);
-        return "redirect:/admin/empresas"; // Redireciona para a listagem
+        return "redirect:/admin/empresas";
     }
 
     @GetMapping("/editar/{id}")

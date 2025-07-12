@@ -2,93 +2,62 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title th:text="#{empresa.form.title}"></title> <style>
-        .text-danger {
-            color: red;
-            font-size: 0.85em; /* Tamanho da fonte menor para os erros */
-            margin-left: 10px; /* Espaçamento à esquerda para separar do input */
-            display: inline-block; /* Garante que o span fique na mesma linha que o input, se houver espaço */
-        }
-        div {
-            margin-bottom: 15px; /* Espaço entre os grupos de label/input/erro */
-        }
-        label {
-            display: inline-block; /* Para alinhar labels */
-            width: 120px; /* Largura fixa para alinhar inputs */
-            text-align: right;
-            margin-right: 10px;
-        }
-        input[type="text"], input[type="password"], textarea {
-            width: 200px; /* Largura para os campos de input */
-            padding: 5px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-        button {
-            padding: 8px 15px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #0056b3;
-        }
-        a {
-            color: #007bff;
-            text-decoration: none;
-        }
-        a:hover {
-            text-decoration: underline;
-        }
-    </style>
+    <title th:text="${empresa.id} ? 'Editar Empresa' : 'Nova Empresa'"></title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-    <h1 th:text="#{empresa.form.title}"></h1> <form th:action="@{/admin/empresas}" th:object="${empresa}" method="post">
-        <input type="hidden" th:field="*{id}" />
-
-        <div>
-            <label for="email" th:text="#{empresa.email.label}"></label>
-            <input type="text" id="email" th:field="*{email}" />
-            <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="text-danger"></span>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" th:href="@{/admin/index}">Admin</a>
         </div>
+    </nav>
 
-        <div>
-            <label for="senha" th:text="#{empresa.senha.label}"></label>
-            <input type="password" id="senha" th:field="*{senha}" />
-            <span th:if="${#fields.hasErrors('senha')}" th:errors="*{senha}" class="text-danger"></span>
+    <div class="container mt-4">
+        <h2 th:text="${empresa.id} ? 'Editar Empresa' : 'Nova Empresa'" class="mb-4"></h2>
+        
+        <div class="card">
+            <div class="card-body">
+                <form th:action="@{/admin/empresas}" th:object="${empresa}" method="post">
+                    <input type="hidden" th:field="*{id}">
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Nome</label>
+                        <input type="text" class="form-control" th:field="*{nome}" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Email</label>
+                        <input type="email" class="form-control" th:field="*{email}" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Senha</label>
+                        <input type="password" class="form-control" th:field="*{senha}" th:unless="${empresa.id}" required>
+                        <div th:if="${empresa.id}" class="form-text">Deixe em branco para manter a senha atual</div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">CNPJ</label>
+                        <input type="text" class="form-control" th:field="*{cnpj}" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Cidade</label>
+                        <input type="text" class="form-control" th:field="*{cidade}" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Descrição</label>
+                        <textarea class="form-control" th:field="*{descricao}" rows="3"></textarea>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary">Salvar</button>
+                    <a th:href="@{/admin/empresas}" class="btn btn-secondary">Cancelar</a>
+                </form>
+            </div>
         </div>
-
-        <div>
-            <label for="cnpj" th:text="#{empresa.cnpj.label}"></label>
-            <input type="text" id="cnpj" th:field="*{cnpj}" placeholder="XX.XXX.XXX/XXXX-XX"/> <span th:if="${#fields.hasErrors('cnpj')}" th:errors="*{cnpj}" class="text-danger"></span>
-        </div>
-
-        <div>
-            <label for="nome" th:text="#{empresa.nome.label}"></label>
-            <input type="text" id="nome" th:field="*{nome}" />
-            <span th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}" class="text-danger"></span>
-        </div>
-
-        <div>
-            <label for="descricao" th:text="#{empresa.descricao.label}"></label>
-            <textarea id="descricao" th:field="*{descricao}" rows="5" cols="50"></textarea> <span th:if="${#fields.hasErrors('descricao')}" th:errors="*{descricao}" class="text-danger"></span>
-        </div>
-
-        <div>
-            <label for="cidade" th:text="#{empresa.cidade.label}"></label>
-            <input type="text" id="cidade" th:field="*{cidade}" />
-            <span th:if="${#fields.hasErrors('cidade')}" th:errors="*{cidade}" class="text-danger"></span>
-        </div>
-
-        <button type="submit" th:text="#{empresa.form.submit}"></button>
-    </form>
-
-    <br/>
-    <a th:href="@{/admin/empresas}" th:text="#{button.back}"></a> <div style="margin-top: 20px;">
-        <a th:href="@{/admin/empresas/form(lang=pt)}" th:text="#{lang.portuguese}"></a> |
-        <a th:href="@{/admin/empresas/form(lang=en)}" th:text="#{lang.english}"></a>
     </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

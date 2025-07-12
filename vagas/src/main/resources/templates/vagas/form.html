@@ -2,108 +2,54 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title th:text="#{vaga.form.title}"></title> <style>
-        /* Estilos básicos para o formulário e mensagens de erro */
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-        }
-        .text-danger {
-            color: red;
-            font-size: 0.85em;
-            margin-left: 10px;
-            display: inline-block;
-        }
-        div {
-            margin-bottom: 15px;
-        }
-        label {
-            display: inline-block;
-            width: 180px; /* Aumentado para acomodar labels mais longos */
-            text-align: right;
-            margin-right: 10px;
-            vertical-align: top; /* Alinha o label com o topo do campo se o campo for maior (ex: textarea) */
-            padding-top: 5px; /* Pequeno padding para alinhar com o input */
-        }
-        input[type="text"], input[type="number"], input[type="date"], select, textarea {
-            width: 250px;
-            padding: 8px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            box-sizing: border-box; /* Garante que padding não aumente a largura total */
-        }
-        textarea {
-            resize: vertical; /* Permite redimensionar verticalmente */
-            min-height: 80px; /* Altura mínima para a área de texto */
-        }
-        button {
-            padding: 10px 20px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            margin-top: 10px;
-        }
-        button:hover {
-            background-color: #0056b3;
-        }
-        a {
-            color: #007bff;
-            text-decoration: none;
-            margin-right: 10px;
-        }
-        a:hover {
-            text-decoration: underline;
-        }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${vaga.id} ? 'Editar Vaga' : 'Nova Vaga'"></title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-    <h1 th:text="#{vaga.form.title}"></h1> <form th:action="@{/vagas}" th:object="${vaga}" method="post">
-        <input type="hidden" th:field="*{id}" />
-
-        <div>
-            <label for="empresa" th:text="#{vaga.empresa.label}"></label>
-            <select id="empresa" th:field="*{empresa}">
-                <option value="" th:text="#{select.option.default}"></option>
-                <option th:each="emp : ${empresas}"
-                        th:value="${emp.id}"
-                        th:text="${emp.nome}">Nome da Empresa</option>
-            </select>
-            <span th:if="${#fields.hasErrors('empresa')}" th:errors="*{empresa}" class="text-danger"></span>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="#">Vagas</a>
         </div>
+    </nav>
 
-        <div>
-            <label for="descricao" th:text="#{vaga.descricao.label}"></label>
-            <textarea id="descricao" th:field="*{descricao}"></textarea>
-            <span th:if="${#fields.hasErrors('descricao')}" th:errors="*{descricao}" class="text-danger"></span>
+    <div class="container mt-4">
+        <div class="card">
+            <div class="card-header">
+                <h2 th:text="${vaga.id} ? 'Editar Vaga' : 'Nova Vaga'"></h2>
+            </div>
+            <div class="card-body">
+                <form th:action="@{/vagas}" th:object="${vaga}" method="post">
+                    <input type="hidden" th:field="*{id}" />
+                    <input type="hidden" th:field="*{empresa.id}" />
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Descrição</label>
+                        <textarea class="form-control" th:field="*{descricao}" rows="4" required></textarea>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Remuneração (R$)</label>
+                            <input type="number" class="form-control" th:field="*{remuneracao}" step="0.01" required>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Data Limite</label>
+                            <input type="date" class="form-control" th:field="*{dataLimiteInscricao}" required>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Cidade</label>
+                        <input type="text" class="form-control" th:field="*{cidade}" required>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary">Salvar</button>
+                    <a th:href="@{/vagas/index}" class="btn btn-secondary">Cancelar</a>
+                </form>
+            </div>
         </div>
-
-        <div>
-            <label for="remuneracao" th:text="#{vaga.remuneracao.label}"></label>
-            <input type="number" id="remuneracao" th:field="*{remuneracao}" step="0.01" min="0"/>
-            <span th:if="${#fields.hasErrors('remuneracao')}" th:errors="*{remuneracao}" class="text-danger"></span>
-        </div>
-
-        <div>
-            <label for="dataLimite" th:text="#{vaga.dataLimite.label}"></label>
-            <input type="date" id="dataLimite" th:field="*{dataLimite}" />
-            <span th:if="${#fields.hasErrors('dataLimite')}" th:errors="*{dataLimite}" class="text-danger"></span>
-        </div>
-
-        <div>
-            <label for="cidade" th:text="#{vaga.cidade.label}"></label>
-            <input type="text" id="cidade" th:field="*{cidade}" />
-            <span th:if="${#fields.hasErrors('cidade')}" th:errors="*{cidade}" class="text-danger"></span>
-        </div>
-
-        <button type="submit" th:text="#{vaga.form.submit}"></button>
-    </form>
-
-    <br/>
-    <a th:href="@{/vagas}" th:text="#{button.back}"></a> <div style="margin-top: 20px;">
-        <a th:href="@{/vagas/form(lang=pt)}" th:text="#{lang.portuguese}"></a> |
-        <a th:href="@{/vagas/form(lang=en)}" th:text="#{lang.english}"></a>
     </div>
 </body>
 </html>

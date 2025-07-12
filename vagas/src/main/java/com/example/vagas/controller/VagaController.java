@@ -1,19 +1,20 @@
 package com.example.vagas.controller;
 
+import com.example.vagas.model.Empresa;
 import com.example.vagas.model.Vaga;
 import com.example.vagas.repository.VagaRepository;
-import com.example.vagas.repository.EmpresaRepository; 
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult; 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 
+import com.example.vagas.service.EmpresaService;
+import org.springframework.security.core.Authentication;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -26,41 +27,54 @@ public class VagaController {
     private VagaRepository vagaRepository;
 
     @Autowired
-    private EmpresaRepository empresaRepository;
+    private EmpresaService empresaService;
 
-    @GetMapping
+    @GetMapping("/listagem")
     public String listarVagas(Model model, @RequestParam(required = false) String cidade) {
         List<Vaga> vagas = (cidade == null || cidade.isEmpty()) ?
-            vagaRepository.findByDataLimiteAfter(LocalDate.now()) :
-            vagaRepository.findByCidadeAndDataLimiteAfter(cidade, LocalDate.now());
+            vagaRepository.findByDataLimiteInscricaoAfter(LocalDate.now()) :
+            vagaRepository.findByCidadeAndDataLimiteInscricaoAfter(cidade, LocalDate.now());
 
         model.addAttribute("vagas", vagas);
         return "vagas/listagem";
     }
 
-    // Método para exibir o formulário de cadastro de nova vaga
-    @GetMapping("/form") // para mostrar o formulário de nova vaga
-    public String showVagaForm(Model model) {
-        model.addAttribute("vaga", new Vaga());
-        // Adiciona todas as empresas ao modelo para popular um <select> no formulário,
-        // permitindo associar a vaga a uma empresa existente.
-        model.addAttribute("empresas", empresaRepository.findAll());
-        return "vagas/form"; // Nome do template do formulário de vaga
+    @GetMapping("/index")
+    public String indexEmpresa(Model model, Authentication authentication) {
+        Empresa empresa = empresaService.buscarPorUsuario(authentication.getName()); // ou outro método
+        List<Vaga> vagas = vagaRepository.findByEmpresaAndDataLimiteInscricaoAfter(empresa, LocalDate.now());
+        model.addAttribute("vagas", vagas);
+        return "vagas/index";
     }
 
-    // Método para processar o envio do formulário e salvar a vaga (com validação)
     @PostMapping
-    public String saveVaga(@Valid @ModelAttribute Vaga vaga, BindingResult result, Model model) {
-        if (result.hasErrors()) {
-            // Se houver erros de validação, retorna para o formulário.
-            model.addAttribute("empresas", empresaRepository.findAll());
-            return "vagas/form"; // Retorna para o formulário para exibir erros
-        }
-        // Se não houver erros, salva a vaga no banco de dados
+    public String salvar(@ModelAttribute Vaga vaga, Authentication authentication) {
+        Empresa empresa = empresaService.buscarPorUsuario(authentication.getName());
+        vaga.setEmpresa(empresa); // força a associação
         vagaRepository.save(vaga);
-        return "redirect:/vagas"; // Redireciona para a listagem de vagas (R4)
+        return "redirect:/vagas/index";
     }
 
-    // Você também pode adicionar métodos para editar e excluir vagas aqui, seguindo o padrão CRUD
-    // @GetMapping("/editar/{id}") e @GetMapping("/excluir/{id}")
+
+    @GetMapping("/form")
+    public String form(Model model) {
+        model.addAttribute("vaga", new Vaga());
+        return "vagas/form";
+    }
+
+    @GetMapping("/editar/{id}")
+    public String editar(@PathVariable Long id, Model model) {
+        Vaga vaga = vagaRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Vaga não encontrada"));
+        model.addAttribute("vaga", vaga);
+        return "vagas/form";
+    }
+
+    @PostMapping("/excluir/{id}")
+    public String excluir(@PathVariable Long id) {
+        vagaRepository.deleteById(id);
+        return "redirect:/vagas/index";
+    }
+
 }
+
+

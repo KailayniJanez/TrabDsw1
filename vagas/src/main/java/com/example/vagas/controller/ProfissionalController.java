@@ -2,11 +2,10 @@ package com.example.vagas.controller;
 
 import com.example.vagas.model.Profissional;
 import com.example.vagas.repository.ProfissionalRepository;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
@@ -15,6 +14,9 @@ public class ProfissionalController {
 
     @Autowired
     private ProfissionalRepository profissionalRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @GetMapping
     public String listar(Model model) {
@@ -28,16 +30,29 @@ public class ProfissionalController {
         return "profissionais/form";
     }
 
-    @PostMapping // O método 'salvar' será alterado
-    public String salvar(@Valid @ModelAttribute Profissional profissional, BindingResult result, Model model) {
-        if (result.hasErrors()) {
-            // Se houver erros de validação, retorna para o mesmo formulário
-            return "profissionais/form";
+    // @PostMapping
+    // public String salvar(@ModelAttribute Profissional profissional) {
+    //     profissionalRepository.save(profissional);
+    //     return "redirect:/admin/profissionais";
+    // }
+
+    @PostMapping
+    public String salvar(@ModelAttribute Profissional profissional) {
+        if (profissional.getId() == null) {
+            profissional.setSenha(passwordEncoder.encode(profissional.getSenha()));
+        } else {
+            Profissional existente = profissionalRepository.findById(profissional.getId()).orElseThrow();
+            if (profissional.getSenha() == null || profissional.getSenha().isEmpty()) {
+                profissional.setSenha(existente.getSenha());
+            } else {
+                profissional.setSenha(passwordEncoder.encode(profissional.getSenha()));
+            }
         }
-        // Se não houver erros, salva o profissional no banco de dados
+
         profissionalRepository.save(profissional);
-        return "redirect:/admin/profissionais"; // Redireciona para a listagem
+        return "redirect:/admin/profissionais";
     }
+
 
     @GetMapping("/editar/{id}")
     public String editar(@PathVariable Long id, Model model) {
@@ -51,5 +66,4 @@ public class ProfissionalController {
         return "redirect:/admin/profissionais";
     }
 }
-
 
