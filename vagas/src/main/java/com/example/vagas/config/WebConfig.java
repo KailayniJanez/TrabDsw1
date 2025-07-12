@@ -1,4 +1,4 @@
-package com.example.vagas.config;
+package com.example.vagas.config; 
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,14 +16,14 @@ public class WebConfig implements WebMvcConfigurer {
     @Bean
     public LocaleResolver localeResolver() {
         SessionLocaleResolver slr = new SessionLocaleResolver();
-        slr.setDefaultLocale(new Locale("pt", "BR")); // Define o idioma padrão como Português do Brasil
+        slr.setDefaultLocale(new Locale("pt", "BR"));
         return slr;
     }
 
     @Bean
     public LocaleChangeInterceptor localeChangeInterceptor() {
         LocaleChangeInterceptor lci = new LocaleChangeInterceptor();
-        lci.setParamName("lang"); // O parâmetro na URL para mudar o idioma (ex: ?lang=en)
+        lci.setParamName("lang");
         return lci;
     }
 
