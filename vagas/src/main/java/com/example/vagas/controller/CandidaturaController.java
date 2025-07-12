@@ -2,7 +2,6 @@ package com.example.vagas.controller;
 
 import com.example.vagas.model.*;
 import com.example.vagas.repository.*;
-import com.example.vagas.service.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -27,8 +26,6 @@ public class CandidaturaController {
     @Autowired
     private ProfissionalRepository profissionalRepo;
     
-    @Autowired
-    private EmailService emailService;
 
     // R5: Processar candidatura
     @PostMapping("/nova")
