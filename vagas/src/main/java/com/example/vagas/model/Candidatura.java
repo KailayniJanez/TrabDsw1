@@ -126,7 +126,6 @@ public class Candidatura {
         this.linkEntrevista = linkEntrevista;
     }
 
-    // Métodos auxiliares
     @Override
     public String toString() {
         return "Candidatura{" +

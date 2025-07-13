@@ -6,14 +6,17 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import jakarta.validation.constraints.Past;
 import org.springframework.format.annotation.DateTimeFormat;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.PrimaryKeyJoinColumn;
+import jakarta.persistence.Table;
 import java.time.LocalDate;
 
-@Entity
-public class Profissional {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+@Entity
+@Table(name = "profissional") 
+@PrimaryKeyJoinColumn(name = "id") 
+public class Profissional extends Usuario { 
 
     @Column(unique = true, nullable = false)
     @NotBlank(message = "Email é obrigatório")
@@ -33,6 +36,8 @@ public class Profissional {
 
     @NotBlank(message = "Telefone é obrigatório")
     @Size(min = 0, max = 11, message = "Telefone deve ter 11 dígitos")
+    private String cpf;
+
     private String telefone;
 
     private String sexo;
@@ -41,68 +46,43 @@ public class Profissional {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate dataNascimento;
 
-    // Getters e Setters
-    public Long getId() {
-        return id;
+    public Profissional() {
+        super();
+        this.setRole("ROLE_PROFISSIONAL");
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getSenha() {
-        return senha;
-    }
-
-    public void setSenha(String senha) {
-        this.senha = senha;
-    }
-
-    public String getCpf() {
-        return cpf;
-    }
-
-    public void setCpf(String cpf) {
+    public Profissional(String email, String senha, String nome, String cpf, String telefone, String sexo, LocalDate dataNascimento) {
+        super(email, senha, nome, "ROLE_PROFISSIONAL");
         this.cpf = cpf;
-    }
-
-    public String getNome() {
-        return nome;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
-    public String getTelefone() {
-        return telefone;
-    }
-
-    public void setTelefone(String telefone) {
         this.telefone = telefone;
-    }
-
-    public String getSexo() {
-        return sexo;
-    }
-
-    public void setSexo(String sexo) {
         this.sexo = sexo;
-    }
-
-    public LocalDate getDataNascimento() {
-        return dataNascimento;
-    }
-
-    public void setDataNascimento(LocalDate dataNascimento) {
         this.dataNascimento = dataNascimento;
     }
+
+    // Getters e Setters de Profissional
+    public String getCpf() { 
+        return cpf; 
+    }
+    public void setCpf(String cpf) { 
+        this.cpf = cpf; 
+    }
+    public String getTelefone() { 
+        return telefone; 
+    }
+    public void setTelefone(String telefone) { 
+        this.telefone = telefone; 
+    }
+    public String getSexo() { 
+        return sexo; 
+    }
+    public void setSexo(String sexo) { 
+        this.sexo = sexo; 
+    }
+    public LocalDate getDataNascimento() { 
+        return dataNascimento; 
+    }
+    public void setDataNascimento(LocalDate dataNascimento) { 
+        this.dataNascimento = dataNascimento; 
+    }
+
 }
