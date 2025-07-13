@@ -2,16 +2,14 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Área do Administrador</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title th:text="#{admin.title}">Área do Administrador</title> <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
         <div class="container">
             <a class="navbar-brand" href="#">Admin</a>
             <form th:action="@{/logout}" method="post" class="ms-auto">
-                <button type="submit" class="btn btn-light">Sair</button>
-            </form>
+                <button type="submit" class="btn btn-light" th:text="#{admin.logout}">Sair</button> </form>
         </div>
     </nav>
 
@@ -20,19 +18,13 @@
             <div class="col-md-4 mb-4">
                 <div class="card h-100">
                     <div class="card-body text-center">
-                        <h5 class="card-title">Empresas</h5>
-                        <p class="card-text">Gerencie as empresas cadastradas</p>
-                        <a th:href="@{/admin/empresas/list}" class="btn btn-primary">Acessar</a>
-                    </div>
+                        <h5 class="card-title" th:text="#{admin.companies.title}">Empresas</h5> <p class="card-text" th:text="#{admin.companies.description}">Gerencie as empresas cadastradas</p> <a th:href="@{/admin/empresas/list}" class="btn btn-primary" th:text="#{admin.access}">Acessar</a> </div>
                 </div>
             </div>
             <div class="col-md-4 mb-4">
                 <div class="card h-100">
                     <div class="card-body text-center">
-                        <h5 class="card-title">Profissionais</h5>
-                        <p class="card-text">Gerencie os profissionais cadastrados</p>
-                        <a th:href="@{/admin/profissionais}" class="btn btn-primary">Acessar</a>
-                    </div>
+                        <h5 class="card-title" th:text="#{admin.professionals.title}">Profissionais</h5> <p class="card-text" th:text="#{admin.professionals.description}">Gerencie os profissionais cadastrados</p> <a th:href="@{/admin/profissionais}" class="btn btn-primary" th:text="#{admin.access}">Acessar</a> </div>
                 </div>
             </div>
         </div>

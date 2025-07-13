@@ -2,8 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Minhas Candidaturas</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title th:text="#{candidate.applications.title}">Minhas Candidaturas</title> <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
     <style>
         .status-badge {
@@ -29,17 +28,13 @@
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
         <div class="container">
-            <a class="navbar-brand" th:href="@{/profissional/dashboard}">Meu Perfil</a>
-            <form th:action="@{/logout}" method="post" class="ms-auto">
-                <button type="submit" class="btn btn-light">Sair</button>
-            </form>
+            <a class="navbar-brand" th:href="@{/profissional/dashboard}" th:text="#{candidate.profile.link}">Meu Perfil</a> <form th:action="@{/logout}" method="post" class="ms-auto">
+                <button type="submit" class="btn btn-light" th:text="#{admin.logout}">Sair</button> </form>
         </div>
     </nav>
 
     <div class="container mt-4">
-        <h1 class="mb-4">Minhas Candidaturas</h1>
-
-        <div class="card shadow">
+        <h1 class="mb-4" th:text="#{candidate.applications.title}">Minhas Candidaturas</h1> <div class="card shadow">
             <div class="card-body">
                 <div th:each="candidatura : ${candidaturas}" class="mb-4 pb-3 border-bottom">
                     <div class="d-flex justify-content-between">
@@ -47,32 +42,24 @@
                         <span th:classappend="${candidatura.status == 'ABERTO'} ? 'status-badge status-aberto' :
                                              ${candidatura.status == 'ENTREVISTA'} ? 'status-badge status-entrevista' :
                                              'status-badge status-rejeitado'"
-                              th:text="${candidatura.status == 'ABERTO'} ? 'EM ANÁLISE' :
-                                      ${candidatura.status == 'ENTREVISTA'} ? 'ENTREVISTA MARCADA' :
-                                      'NÃO SELECIONADO'"></span>
-                    </div>
+                              th:text="${candidatura.status == 'ABERTO'} ? #{application.status.open} :             (${candidatura.status == 'ENTREVISTA'} ? #{application.status.interview} :   #{application.status.rejected})"></span>                                    </div>
                     <p class="text-muted" th:text="${candidatura.vaga.empresa.nome}"></p>
-                    
+
                     <div th:if="${candidatura.status == 'ENTREVISTA'}" class="alert alert-success mt-2">
-                        <h5><i class="bi bi-calendar-check"></i> Entrevista Agendada</h5>
-                        <p th:text="${'Data: ' + candidatura.dataEntrevista}"></p>
-                        <p th:if="${candidatura.linkEntrevista}">
+                        <h5 th:text="#{application.interview.scheduled}"><i class="bi bi-calendar-check"></i> Entrevista Agendada</h5> <p th:text="#{application.interview.date} + ': ' + ${candidatura.dataEntrevista}"></p> <p th:if="${candidatura.linkEntrevista}">
                             <a th:href="${candidatura.linkEntrevista}" target="_blank" class="btn btn-sm btn-success">
-                                <i class="bi bi-camera-video"></i> Acessar Link da Entrevista
-                            </a>
+                                <i class="bi bi-camera-video"></i> <span th:text="#{application.interview.access_link}">Acessar Link da Entrevista</span> </a>
                         </p>
                     </div>
 
                     <div class="mt-2">
-                        <a th:href="@{/profissional/candidaturas/{id}/curriculo(id=${candidatura.id})}" 
+                        <a th:href="@{/profissional/candidaturas/{id}/curriculo(id=${candidatura.id})}"
                            class="btn btn-sm btn-outline-primary">
-                            <i class="bi bi-file-earmark-pdf"></i> Ver Currículo Enviado
-                        </a>
+                            <i class="bi bi-file-earmark-pdf"></i> <span th:text="#{application.view.resume}">Ver Currículo Enviado</span> </a>
                     </div>
                 </div>
 
-                <div th:if="${candidaturas.isEmpty()}" class="alert alert-info">
-                    Você ainda não se candidatou a nenhuma vaga.
+                <div th:if="${candidaturas.isEmpty()}" class="alert alert-info" th:text="#{application.list.empty}"> Você ainda não se candidatou a nenhuma vaga.
                 </div>
             </div>
         </div>
