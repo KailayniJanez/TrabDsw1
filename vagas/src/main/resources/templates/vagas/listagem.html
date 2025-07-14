@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vagas Disponíveis</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .vaga-card {
+            transition: transform 0.3s;
+            margin-bottom: 20px;
+        }
+        .vaga-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="/">Home</a>
+            <a th:href="@{/login}" class="btn btn-light ms-auto">Área da Empresa</a>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <h1 class="mb-4">Vagas Disponíveis</h1>
+        
+        <form method="get" class="mb-4">
+            <div class="input-group">
+                <input type="text" name="cidade" class="form-control" placeholder="Filtrar por cidade" th:value="${param.cidade}">
+                <button type="submit" class="btn btn-primary">Filtrar</button>
+            </div>
+        </form>
+
+        <div class="row">
+            <div th:each="vaga : ${vagas}" class="col-md-6">
+                <div class="card vaga-card">
+                    <div class="card-body">
+                        <h5 th:text="${vaga.descricao}"></h5>
+                        <p class="text-muted" th:text="${vaga.empresa.nome}"></p>
+                        
+                        <div class="d-flex justify-content-between mb-2">
+                            <span><i class="bi bi-geo-alt"></i> <span th:text="${vaga.empresa.cidade}"></span></span>
+                            <span class="text-success fw-bold" th:text="${'R$ ' + #numbers.formatDecimal(vaga.remuneracao, 1, 2, 'POINT')}"></span>
+                        </div>
+                        
+                        <div class="d-flex justify-content-between align-items-center">
+                            <small class="text-muted" th:text="${'Data limite: ' + #temporals.format(vaga.dataLimiteInscricao, 'dd/MM/yyyy')}"></small>
+                            <a th:href="@{/upload}" class="btn btn-sm btn-primary">Candidatar-se</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,3 @@
+MySQL
+Prompt de comando: mysql -u root -p
+CREATE DATABASE vagasdb CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
