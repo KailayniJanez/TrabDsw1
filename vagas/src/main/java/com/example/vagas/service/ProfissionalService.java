@@ -2,6 +2,9 @@ package com.example.vagas.service;
 
 import com.example.vagas.model.Profissional;
 import com.example.vagas.repository.ProfissionalRepository;
+
+import jakarta.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -17,7 +20,6 @@ public class ProfissionalService {
     private final ProfissionalRepository profissionalRepository;
     private final PasswordEncoder passwordEncoder;
 
-    @Autowired
     public ProfissionalService(ProfissionalRepository profissionalRepository, PasswordEncoder passwordEncoder) {
         this.profissionalRepository = profissionalRepository;
         this.passwordEncoder = passwordEncoder;
@@ -31,7 +33,7 @@ public class ProfissionalService {
         System.out.println("Senha: " + (profissional.getSenha() != null ? "preenchida" : "null"));
         System.out.println("CPF: " + profissional.getCpf());
         System.out.println("Telefone: " + profissional.getTelefone());
-        
+
         profissional.setSenha(passwordEncoder.encode(profissional.getSenha()));
         // Define a role para o profissional (ROLE_PROFISSIONAL)
         profissional.setRole("ROLE_PROFISSIONAL");
@@ -47,6 +49,7 @@ public class ProfissionalService {
         return profissionalRepository.findById(id);
     }
 
+    @Transactional
     public Optional<Profissional> atualizarProfissional(Long id, Profissional profissionalAtualizado) {
         return profissionalRepository.findById(id).map(profissionalExistente -> {
             profissionalExistente.setNome(profissionalAtualizado.getNome());

@@ -2,7 +2,8 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title th:text="#{professional.list.title}">Profissionais Cadastrados</title> <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title th:text="#{professional.list.title}">Profissionais Cadastrados</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
     <style>
         .action-buttons {
@@ -16,15 +17,19 @@
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
         <div class="container">
-            <a class="navbar-brand" th:href="@{/admin/index}" th:text="#{admin.area}">Área Administrativa</a> <form th:action="@{/logout}" method="post" class="ms-auto">
-                <button type="submit" class="btn btn-light" th:text="#{admin.logout}">Sair</button> </form>
+            <a class="navbar-brand" th:href="@{/admin/index}" th:text="#{admin.area}">Área Administrativa</a>
+            <form th:action="@{/logout}" method="post" class="ms-auto">
+                <button type="submit" class="btn btn-light" th:text="#{admin.logout}">Sair</button>
+            </form>
         </div>
     </nav>
 
     <div class="container mt-4">
         <div class="d-flex justify-content-between align-items-center mb-4">
-            <h1 th:text="#{professional.list.title}">Profissionais Cadastrados</h1> <a th:href="@{/admin/profissionais/form}" class="btn btn-primary">
-                <i class="bi bi-plus-lg"></i> <span th:text="#{professional.new}">Novo Profissional</span> </a>
+            <h1 th:text="#{professional.list.title}">Profissionais Cadastrados</h1>
+            <a th:href="@{/admin/profissionais/form}" class="btn btn-primary">
+                <i class="bi bi-plus-lg"></i> <span th:text="#{professional.new}">Novo Profissional</span>
+            </a>
         </div>
 
         <div class="card shadow">
@@ -33,21 +38,39 @@
                     <table class="table table-hover">
                         <thead class="table-light">
                             <tr>
-                                <th th:text="#{professional.table.header.name}">Nome</th> <th th:text="#{professional.table.header.email}">Email</th> <th th:text="#{professional.table.header.cpf}">CPF</th> <th th:text="#{professional.table.header.phone}">Telefone</th> <th class="text-end" th:text="#{professional.table.header.actions}">Ações</th> </tr>
+                                <th th:text="#{professional.table.header.name}">Nome</th>
+                                <th th:text="#{professional.table.header.email}">Email</th>
+                                <th th:text="#{professional.table.header.cpf}">CPF</th>
+                                <th th:text="#{professional.table.header.phone}">Telefone</th>
+                                <th>Data de Nascimento</th>
+                                <th class="text-end" th:text="#{professional.table.header.actions}">Ações</th>
+                            </tr>
                         </thead>
                         <tbody>
                             <tr th:each="prof : ${profissionais}">
                                 <td th:text="${prof.nome}"></td>
                                 <td th:text="${prof.email}"></td>
-                                <td th:text="${prof.cpf}"></td>
-                                <td th:text="${prof.telefone}"></td>
+                                <!-- CPF com máscara -->
+                                <td th:text="${prof.cpf != null and prof.cpf.length() == 11} ? 
+                                    ${prof.cpf.substring(0,3) + '.' + prof.cpf.substring(3,6) + '.' + prof.cpf.substring(6,9) + '-' + prof.cpf.substring(9,11)} : 
+                                    ${prof.cpf}"></td>
+                                <!-- Telefone com máscara -->
+                                <td th:text="${prof.telefone != null and prof.telefone.length() == 11} ? 
+                                    '(' + ${prof.telefone.substring(0,2)} + ') ' + ${prof.telefone.substring(2,7)} + '-' + ${prof.telefone.substring(7,11)} : 
+                                    ${prof.telefone}"></td>
+                                <!-- Data de nascimento formatada -->
+                                <td th:text="${prof.dataNascimento != null} ? 
+                                    ${#temporals.format(prof.dataNascimento, 'dd/MM/yyyy')} : 
+                                    'Não informado'"></td>
                                 <td class="action-buttons text-end">
                                     <a th:href="@{/admin/profissionais/editar/{id}(id=${prof.id})}"
                                        class="btn btn-sm btn-outline-primary me-2">
-                                        <i class="bi bi-pencil"></i> <span th:text="#{action.edit}">Editar</span> </a>
+                                        <i class="bi bi-pencil"></i> <span th:text="#{action.edit}">Editar</span>
+                                    </a>
                                     <a th:href="@{/admin/profissionais/excluir/{id}(id=${prof.id})}"
                                        class="btn btn-sm btn-outline-danger">
-                                        <i class="bi bi-trash"></i> <span th:text="#{action.delete}">Excluir</span> </a>
+                                        <i class="bi bi-trash"></i> <span th:text="#{action.delete}">Excluir</span>
+                                    </a>
                                 </td>
                             </tr>
                         </tbody>
@@ -56,7 +79,8 @@
             </div>
         </div>
 
-        <div th:if="${profissionais.isEmpty()}" class="alert alert-info mt-4" th:text="#{professional.list.empty}"> Nenhum profissional cadastrado ainda.
+        <div th:if="${profissionais.isEmpty()}" class="alert alert-info mt-4" th:text="#{professional.list.empty}">
+            Nenhum profissional cadastrado ainda.
         </div>
     </div>
 

@@ -5,7 +5,6 @@ import com.example.vagas.service.ProfissionalService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.Optional;
@@ -18,30 +17,6 @@ public class ProfissionalController {
 
     public ProfissionalController(ProfissionalService profissionalService) {
         this.profissionalService = profissionalService;
-    }
-
-    @InitBinder
-    public void initBinder(WebDataBinder binder) {
-        binder.registerCustomEditor(String.class, "cpf", new org.springframework.beans.propertyeditors.StringTrimmerEditor(false) {
-            @Override
-            public void setAsText(String text) {
-                if (text != null) {
-                    super.setValue(text.replaceAll("\\D", ""));
-                } else {
-                    super.setValue(null);
-                }
-            }
-        });
-        binder.registerCustomEditor(String.class, "telefone", new org.springframework.beans.propertyeditors.StringTrimmerEditor(false) {
-            @Override
-            public void setAsText(String text) {
-                if (text != null) {
-                    super.setValue(text.replaceAll("\\D", ""));
-                } else {
-                    super.setValue(null);
-                }
-            }
-        });
     }
 
     @GetMapping
@@ -62,6 +37,7 @@ public class ProfissionalController {
         System.out.println("CPF recebido: " + profissional.getCpf());
         System.out.println("Telefone recebido: " + profissional.getTelefone());
         System.out.println("Email recebido: " + profissional.getEmail());
+        System.out.println("Data de nascimento recebida: " + profissional.getDataNascimento());
 
         try {
             if (profissional.getId() == null) {
@@ -88,6 +64,8 @@ public class ProfissionalController {
     public String editar(@PathVariable Long id, Model model, RedirectAttributes redirectAttributes) {
         Optional<Profissional> profissionalOpt = profissionalService.buscarProfissionalPorId(id);
         if (profissionalOpt.isPresent()) {
+            Profissional profissional = profissionalOpt.get();
+            System.out.println("Data de nascimento ao editar: " + profissional.getDataNascimento());
             model.addAttribute("profissional", profissionalOpt.get());
             return "profissionais/form"; // Retorna o formulário preenchido para edição
         } else {

@@ -61,7 +61,6 @@
                             type="date" 
                             class="form-control" 
                             th:field="*{dataNascimento}" 
-                            th:value="${profissional.dataNascimento != null} ? ${#temporals.format(profissional.dataNascimento, 'yyyy-MM-dd')} : ''"
                             th:attr="max=${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}"
                         >
                         <div class="invalid-feedback" th:if="${#fields.hasErrors('dataNascimento')}" th:errors="*{dataNascimento}"></div>
