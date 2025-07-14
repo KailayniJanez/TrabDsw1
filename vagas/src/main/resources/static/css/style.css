@@ -1,0 +1,21 @@
+/* src/main/resources/static/css/style.css */
+
+/* Estilos para a caixa de mensagem de erro (alert-danger do Bootstrap) */
+.alert-danger {
+    background-color: #F8BBD0; /* Exemplo: Um tom de rosa claro */
+    color: #880E4F;          /* Exemplo: Um tom de roxo escuro para o texto */
+    border-color: #F48FB1;    /* Exemplo: Um tom de rosa médio para a borda */
+}
+
+/* Opcional: Se você tiver outras mensagens (sucesso, informação), pode estilizar aqui também */
+.alert-success {
+    background-color: #C8E6C9; /* Exemplo: Verde claro */
+    color: #1B5E20;          /* Exemplo: Texto verde escuro */
+    border-color: #A5D6A7;    /* Exemplo: Borda verde médio */
+}
+
+.alert-info {
+    background-color: #B2EBF2; /* Exemplo: Azul ciano claro */
+    color: #006064;          /* Exemplo: Texto azul ciano escuro */
+    border-color: #80DEEA;    /* Exemplo: Borda azul ciano médio */
+}

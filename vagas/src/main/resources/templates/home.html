@@ -2,9 +2,14 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title th:text="#{app.title}"></title> </head>
+    <title th:text="#{app.title}"></title>
+
+    <link href="/css/style.css" rel="stylesheet">
+
+</head>
 <body>
-    <h1 th:text="#{welcome.message}"></h1> <ul>
+    <h1 th:text="#{welcome.message}"></h1>
+    <ul>
         <li><a th:href="@{/vagas}" th:text="#{menu.viewVagas}"></a></li>
         <li><a th:href="@{/admin/empresas}" th:text="#{menu.companiesAdmin}"></a></li>
         <li><a th:href="@{/admin/profissionais}" th:text="#{menu.professionalsAdmin}"></a></li>
