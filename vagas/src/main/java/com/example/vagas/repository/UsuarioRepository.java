@@ -1,13 +1,10 @@
 package com.example.vagas.repository;
 
+import com.example.vagas.model.Usuario;
 import org.springframework.data.jpa.repository.JpaRepository;
-
-import com.example.vagas.model.Admin;
-
 import java.util.Optional;
 
-public interface AdminRepository extends JpaRepository<Admin, Long> {
-
-    Optional<Admin> findByEmail(String email);
+public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
+    Optional<Usuario> findByEmail(String email);
     boolean existsByEmail(String email);
 }

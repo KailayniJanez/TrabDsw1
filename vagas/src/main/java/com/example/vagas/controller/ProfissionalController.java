@@ -9,8 +9,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.validation.BindingResult;
 import jakarta.validation.Valid;
-import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.InitBinder;
 
 @Controller
 @RequestMapping("/admin/profissionais")
@@ -21,30 +19,6 @@ public class ProfissionalController {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
-
-    @InitBinder
-    public void initBinder(WebDataBinder binder) {
-        binder.registerCustomEditor(String.class, "cpf", new org.springframework.beans.propertyeditors.StringTrimmerEditor(false) {
-            @Override
-            public void setAsText(String text) {
-                if (text != null) {
-                    super.setValue(text.replaceAll("\\D", ""));
-                } else {
-                    super.setValue(null);
-                }
-            }
-        });
-        binder.registerCustomEditor(String.class, "telefone", new org.springframework.beans.propertyeditors.StringTrimmerEditor(false) {
-            @Override
-            public void setAsText(String text) {
-                if (text != null) {
-                    super.setValue(text.replaceAll("\\D", ""));
-                } else {
-                    super.setValue(null);
-                }
-            }
-        });
-    }
 
     @GetMapping
     public String listar(Model model) {
@@ -60,11 +34,11 @@ public class ProfissionalController {
 
     @PostMapping
     public String salvar(@Valid @ModelAttribute Profissional profissional, BindingResult result, Model model) {
-
         if (result.hasErrors()) {
             model.addAttribute("profissional", profissional);
             return "profissionais/form";
         }
+
         if (profissional.getId() == null) {
             profissional.setSenha(passwordEncoder.encode(profissional.getSenha()));
         } else {
@@ -75,6 +49,7 @@ public class ProfissionalController {
                 profissional.setSenha(passwordEncoder.encode(profissional.getSenha()));
             }
         }
+
         profissionalRepository.save(profissional);
         return "redirect:/admin/profissionais";
     }

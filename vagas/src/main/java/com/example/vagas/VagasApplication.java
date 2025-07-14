@@ -1,7 +1,7 @@
 package com.example.vagas;
 
-import com.example.vagas.model.Admin;
-import com.example.vagas.repository.AdminRepository;
+import com.example.vagas.model.UsuarioAdmin;
+import com.example.vagas.repository.UsuarioRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -16,14 +16,15 @@ public class VagasApplication {
     }
 
     @Bean
-    CommandLineRunner initAdmin(AdminRepository repo, PasswordEncoder encoder) {
-        return args -> {
-            if (!repo.existsByEmail("admin@admin.com")) {
-                Admin admin = new Admin();
-                admin.setEmail("admin@admin.com");
-                admin.setSenha(encoder.encode("admin"));
-                repo.save(admin);
-            }
-        };
-    }
+CommandLineRunner initAdmin(UsuarioRepository repo, PasswordEncoder encoder) {
+    return args -> {
+        if (!repo.existsByEmail("admin@admin.com")) {
+            UsuarioAdmin admin = new UsuarioAdmin();
+            admin.setEmail("admin@admin.com");
+            admin.setSenha(encoder.encode("admin"));
+            admin.setNome("Administrador");
+            repo.save(admin);
+        }
+    };
+}
 }

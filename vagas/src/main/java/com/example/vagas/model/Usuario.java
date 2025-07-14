@@ -3,17 +3,14 @@ package com.example.vagas.model;
 import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-
 import java.util.Collection;
-import java.util.List;
 
 @Entity
-@Table(name = "admin")
-public class Admin implements UserDetails {
-
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+public abstract class Usuario implements UserDetails {
+    
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.TABLE)
     private Long id;
 
     @Column(nullable = false, unique = true)
@@ -22,7 +19,10 @@ public class Admin implements UserDetails {
     @Column(nullable = false)
     private String senha;
 
+    @Column(nullable = false)
+    private String nome;
 
+    // Getters e Setters
     public Long getId() {
         return id;
     }
@@ -47,12 +47,15 @@ public class Admin implements UserDetails {
         this.senha = senha;
     }
 
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"));
+    public String getNome() {
+        return nome;
     }
 
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    // Métodos do UserDetails
     @Override
     public String getPassword() {
         return senha;

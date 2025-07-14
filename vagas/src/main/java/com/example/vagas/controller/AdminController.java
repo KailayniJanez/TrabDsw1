@@ -1,5 +1,8 @@
 package com.example.vagas.controller;
 
+import com.example.vagas.model.UsuarioAdmin;
+import com.example.vagas.repository.UsuarioRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -8,12 +11,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/admin")
 public class AdminController {
 
-    // Este método serve a página principal do dashboard do administrador.
-    // Ele não precisa de injeções de serviço se apenas redireciona para a view.
-    @GetMapping("/index") // Mapeia para http://localhost:8080/admin/index
-    public String showAdminDashboard() {
-        return "admin/index"; // Retorna o nome do template Thymeleaf
-                             // (src/main/resources/templates/admin/index.html)
+    private final UsuarioRepository usuarioRepo;
+    private final PasswordEncoder passwordEncoder;
+
+    public AdminController(UsuarioRepository usuarioRepo, PasswordEncoder passwordEncoder) {
+        this.usuarioRepo = usuarioRepo;
+        this.passwordEncoder = passwordEncoder;
     }
 
+    @GetMapping("/index")
+    public String showAdminDashboard() {
+        return "admin/index";
+    }
 }

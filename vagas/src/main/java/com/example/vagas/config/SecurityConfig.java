@@ -24,8 +24,8 @@ public class SecurityConfig {
 
     @Autowired
     public SecurityConfig(CustomAuthenticationSuccessHandler successHandler,
-                          UsuarioDetailsService usuarioDetailsService,
-                          PasswordEncoder passwordEncoder) {
+                         UsuarioDetailsService usuarioDetailsService,
+                         PasswordEncoder passwordEncoder) {
         this.successHandler = successHandler;
         this.usuarioDetailsService = usuarioDetailsService;
         this.passwordEncoder = passwordEncoder;
@@ -36,12 +36,11 @@ public class SecurityConfig {
         http
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/", "/login", "/vagas/listagem", "/css/**", "/js/**").permitAll()
-                .requestMatchers(HttpMethod.POST, "/admin/empresas").hasRole("ADMIN") // <-- Adicione esta linha
+                .requestMatchers(HttpMethod.POST, "/admin/empresas").hasRole("ADMIN")
                 .requestMatchers("/admin/**").hasRole("ADMIN")
                 .requestMatchers("/vagas/**").hasRole("EMPRESA")
-                .requestMatchers("/vagas/index").hasRole("Empresa")
-                .requestMatchers("/vagas/listagem").hasRole("PROFISSIONAIS")
-            .anyRequest().authenticated()
+                .requestMatchers("/profissional/**").hasRole("PROFISSIONAL")
+                .anyRequest().authenticated()
             )
             .formLogin(form -> form
                 .loginPage("/login")
@@ -61,7 +60,4 @@ public class SecurityConfig {
         auth.userDetailsService(usuarioDetailsService)
             .passwordEncoder(passwordEncoder);
     }
-
-    
 }
-

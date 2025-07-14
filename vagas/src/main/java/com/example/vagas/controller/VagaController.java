@@ -11,7 +11,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.http.HttpStatus;
-
 import java.time.LocalDate;
 import java.util.List;
 
@@ -26,59 +25,58 @@ public class VagaController {
     private EmpresaService empresaService;
 
     @GetMapping("/listagem")
-public String listarVagasPublicas(Model model, 
-                                @RequestParam(required = false) String cidade) {
-    try {
-        List<Vaga> vagas;
-        
-        if (cidade != null && !cidade.isEmpty()) {
-            vagas = vagaRepository.findByEmpresaCidadeAndDataLimiteInscricaoGreaterThanEqual(
-                cidade, 
-                LocalDate.now()
-            );
-        } else {
-            vagas = vagaRepository.findByDataLimiteInscricaoGreaterThanEqual(LocalDate.now());
+    public String listarVagasPublicas(Model model, 
+                                    @RequestParam(required = false) String cidade) {
+        try {
+            List<Vaga> vagas;
+            
+            if (cidade != null && !cidade.isEmpty()) {
+                vagas = vagaRepository.findByEmpresaCidadeAndDataLimiteInscricaoGreaterThanEqual(
+                    cidade, 
+                    LocalDate.now()
+                );
+            } else {
+                vagas = vagaRepository.findByDataLimiteInscricaoGreaterThanEqual(LocalDate.now());
+            }
+            
+            if (vagas.isEmpty()) {
+                model.addAttribute("mensagem", 
+                    cidade != null ? 
+                    "Nenhuma vaga disponível em " + cidade : 
+                    "Nenhuma vaga disponível no momento");
+            }
+            
+            model.addAttribute("vagas", vagas);
+            return "vagas/listagem";
+            
+        } catch (Exception e) {
+            model.addAttribute("erro", "Erro ao carregar vagas: " + e.getMessage());
+            return "error";
         }
-        
-        if (vagas.isEmpty()) {
-            model.addAttribute("mensagem", 
-                cidade != null ? 
-                "Nenhuma vaga disponível em " + cidade : 
-                "Nenhuma vaga disponível no momento");
-        }
-        
-        model.addAttribute("vagas", vagas);
-        return "vagas/listagem";
-        
-    } catch (Exception e) {
-        model.addAttribute("erro", "Erro ao carregar vagas: " + e.getMessage());
-        return "error";
     }
-}
 
     @GetMapping("/index")
-public String indexEmpresa(Model model, Authentication authentication) {
-    try {
-        Empresa empresa = empresaService.buscarPorUsuario(authentication.getName());
-        List<Vaga> vagas = vagaRepository.findByEmpresaAndDataLimiteInscricaoGreaterThanEqual(empresa, LocalDate.now());
-        
-        if (vagas.isEmpty()) {
-            model.addAttribute("mensagem", "Nenhuma vaga cadastrada ou ativa");
+    public String indexEmpresa(Model model, Authentication authentication) {
+        try {
+            Empresa empresa = empresaService.buscarPorUsuario(authentication.getName());
+            List<Vaga> vagas = vagaRepository.findByEmpresaAndDataLimiteInscricaoGreaterThanEqual(empresa, LocalDate.now());
+            
+            if (vagas.isEmpty()) {
+                model.addAttribute("mensagem", "Nenhuma vaga cadastrada ou ativa");
+            }
+            
+            model.addAttribute("vagas", vagas);
+            return "vagas/index";
+            
+        } catch (Exception e) {
+            model.addAttribute("erro", "Erro ao carregar vagas: " + e.getMessage());
+            return "error";
         }
-        
-        model.addAttribute("vagas", vagas);
-        return "vagas/index";
-        
-    } catch (Exception e) {
-        model.addAttribute("erro", "Erro ao carregar vagas: " + e.getMessage());
-        return "error";
     }
-}
 
     @GetMapping("/form")
     public String form(Model model, Authentication authentication) {
         Vaga vaga = new Vaga();
-        // Associa automaticamente a empresa logada
         Empresa empresa = empresaService.buscarPorUsuario(authentication.getName());
         vaga.setEmpresa(empresa);
         
@@ -88,7 +86,6 @@ public String indexEmpresa(Model model, Authentication authentication) {
 
     @PostMapping
     public String salvar(@ModelAttribute Vaga vaga, Authentication authentication) {
-        // Garante que a vaga está associada à empresa correta
         Empresa empresa = empresaService.buscarPorUsuario(authentication.getName());
         vaga.setEmpresa(empresa);
         vagaRepository.save(vaga);
@@ -100,7 +97,6 @@ public String indexEmpresa(Model model, Authentication authentication) {
         Vaga vaga = vagaRepository.findById(id)
             .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Vaga não encontrada"));
         
-        // Verifica se a vaga pertence à empresa logada
         Empresa empresaLogada = empresaService.buscarPorUsuario(authentication.getName());
         if (!vaga.getEmpresa().getId().equals(empresaLogada.getId())) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Você não tem permissão para editar esta vaga");
@@ -115,7 +111,6 @@ public String indexEmpresa(Model model, Authentication authentication) {
         Vaga vaga = vagaRepository.findById(id)
             .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Vaga não encontrada"));
         
-        // Verifica se a vaga pertence à empresa logada
         Empresa empresaLogada = empresaService.buscarPorUsuario(authentication.getName());
         if (!vaga.getEmpresa().getId().equals(empresaLogada.getId())) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Você não tem permissão para excluir esta vaga");

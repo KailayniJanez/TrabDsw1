@@ -12,6 +12,7 @@ public class Vaga {
     private Long id;
 
     @ManyToOne(optional = false)
+    @JoinColumn(name = "empresa_id")
     private Empresa empresa;
 
     @Column(length = 1000)
