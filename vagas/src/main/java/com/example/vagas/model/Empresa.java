@@ -23,6 +23,9 @@ public class Empresa extends Usuario {
     private String descricao;
     private String cidade;
 
+    public Empresa() {
+        super(); 
+    }
     
 
     public Empresa(String email, String senha, String nome, String cnpj, String descricao, String cidade) {

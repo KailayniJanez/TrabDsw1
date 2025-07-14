@@ -1,6 +1,6 @@
 package com.example.vagas.model;
 
-import jakarta.persistence.*;
+
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
@@ -29,7 +29,7 @@ public class Profissional extends Usuario {
     @Column(nullable = false)
     @NotBlank(message = "CPF é obrigatório")
     @Pattern(regexp = "\\d{11}", message = "CPF deve ter 11 dígitos numéricos")
-    private String cpf;
+  
 
     @NotBlank(message = "Nome é obrigatório")
     private String nome;
