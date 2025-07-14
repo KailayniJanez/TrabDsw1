@@ -39,16 +39,18 @@
                         <div class="invalid-feedback" th:if="${#fields.hasErrors('senha')}" th:errors="*{senha}"></div>
                     </div>
                     
+                    <input type="hidden" th:field="*{cpf}" id="cpf-hidden">
                     <div class="mb-3">
                         <label class="form-label">CPF</label>
-                        <input type="text" class="form-control" th:field="*{cpf}" id="cpf" maxlength="14" required>
+                        <input type="text" class="form-control" id="cpf-display" maxlength="14" required>
                         <div class="invalid-feedback" id="cpf-error" style="display:none;">CPF inválido. Digite 11 dígitos.</div>
                         <div class="invalid-feedback" th:if="${#fields.hasErrors('cpf')}" th:errors="*{cpf}"></div>
                     </div>
                     
+                    <input type="hidden" th:field="*{telefone}" id="telefone-hidden">
                     <div class="mb-3">
                         <label class="form-label">Telefone</label>
-                        <input type="text" class="form-control" th:field="*{telefone}" id="telefone" maxlength="15">
+                        <input type="text" class="form-control" id="telefone-display" maxlength="15">
                         <div class="invalid-feedback" id="telefone-error" style="display:none;">Telefone inválido.</div>
                         <div class="invalid-feedback" th:if="${#fields.hasErrors('telefone')}" th:errors="*{telefone}"></div>
                     </div>
@@ -77,28 +79,51 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
     <script>
         $(document).ready(function(){
-            $('#cpf').mask('000.000.000-00');
-            $('#telefone').mask('(00) 00000-0000');
+            $('#cpf-display').mask('000.000.000-00');
+            $('#telefone-display').mask('(00) 00000-0000');
+
+            let cpfValue = $('#cpf-hidden').val();
+            if (cpfValue && cpfValue.length === 11) {
+                $('#cpf-display').val(cpfValue);
+            }
+            let telValue = $('#telefone-hidden').val();
+            if (telValue && telValue.length === 11) {
+                $('#telefone-display').val(telValue);
+            }
+
+            $('#cpf-display').on('input', function(){
+                let cpfLimpo = $(this).cleanVal();
+                $('#cpf-hidden').val(cpfLimpo);
+            });
+            $('#telefone-display').on('input', function(){
+                let telLimpo = $(this).cleanVal();
+                $('#telefone-hidden').val(telLimpo);
+            });
 
             $('form').on('submit', function(e){
-                let cpf = $('#cpf').cleanVal();
+                let cpf = $('#cpf-display').cleanVal();
+                let tel = $('#telefone-display').cleanVal();
+                let erro = false;
+
                 if (cpf.length !== 11) {
                     $('#cpf-error').show();
-                    $('#cpf').addClass('is-invalid');
-                    e.preventDefault();
+                    $('#cpf-display').addClass('is-invalid');
+                    erro = true;
                 } else {
                     $('#cpf-error').hide();
-                    $('#cpf').removeClass('is-invalid');
+                    $('#cpf-display').removeClass('is-invalid');
+                    $('#cpf-hidden').val(cpf);
                 }
-                let tel = $('#telefone').cleanVal();
                 if (tel && tel.length !== 11) {
                     $('#telefone-error').show();
-                    $('#telefone').addClass('is-invalid');
-                    e.preventDefault();
+                    $('#telefone-display').addClass('is-invalid');
+                    erro = true;
                 } else {
                     $('#telefone-error').hide();
-                    $('#telefone').removeClass('is-invalid');
+                    $('#telefone-display').removeClass('is-invalid');
+                    $('#telefone-hidden').val(tel);
                 }
+                if (erro) e.preventDefault();
             });
         });
     </script>

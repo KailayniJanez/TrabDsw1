@@ -20,6 +20,8 @@
                 <form th:action="@{/admin/empresas}" th:object="${empresa}" method="post" novalidate>
                     <input type="hidden" th:field="*{id}">
                     
+                    <input type="hidden" th:field="*{cnpj}" id="cnpj-hidden">
+                    
                     <div class="mb-3">
                         <label class="form-label">Nome</label>
                         <input type="text" class="form-control" th:field="*{nome}" required>
@@ -38,7 +40,7 @@
                     
                     <div class="mb-3">
                         <label class="form-label">CNPJ</label>
-                        <input type="text" class="form-control" th:field="*{cnpj}" id="cnpj" maxlength="18" required>
+                        <input type="text" class="form-control" id="cnpj-display" maxlength="18" required>
                         <div class="invalid-feedback" id="cnpj-error" style="display:none;">CNPJ inválido. Digite 14 dígitos.</div>
                         <div class="invalid-feedback" th:if="${#fields.hasErrors('cnpj')}" th:errors="*{cnpj}"></div>
                     </div>
@@ -65,17 +67,34 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
     <script>
         $(document).ready(function(){
-            $('#cnpj').mask('00.000.000/0000-00');
+            $('#cnpj-display').mask('00.000.000/0000-00');
+            
+            let cnpjValue = $('#cnpj-hidden').val();
+            if (cnpjValue && cnpjValue.length === 14) {
+                $('#cnpj-display').val(cnpjValue);
+            }
+
+            $('#cnpj-display').on('input', function(){
+                let cnpjLimpo = $(this).cleanVal();
+                $('#cnpj-hidden').val(cnpjLimpo);
+            });
 
             $('form').on('submit', function(e){
-                let cnpj = $('#cnpj').cleanVal();
+                let cnpj = $('#cnpj-display').cleanVal();
+                let erro = false;
+                
                 if (cnpj.length !== 14) {
                     $('#cnpj-error').show();
-                    $('#cnpj').addClass('is-invalid');
-                    e.preventDefault();
+                    $('#cnpj-display').addClass('is-invalid');
+                    erro = true;
                 } else {
                     $('#cnpj-error').hide();
-                    $('#cnpj').removeClass('is-invalid');
+                    $('#cnpj-display').removeClass('is-invalid');
+                    $('#cnpj-hidden').val(cnpj);
+                }
+                
+                if (erro) {
+                    e.preventDefault();
                 }
             });
         });
