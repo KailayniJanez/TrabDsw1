@@ -1,6 +1,5 @@
 package com.example.vagas.model;
 
-
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
@@ -10,33 +9,20 @@ import jakarta.persistence.PrimaryKeyJoinColumn;
 import jakarta.persistence.Table;
 import java.time.LocalDate;
 
-
 @Entity
 @Table(name = "profissional") 
 @PrimaryKeyJoinColumn(name = "id") 
 public class Profissional extends Usuario { 
 
-    @Column(unique = true, nullable = false)
-    @NotBlank(message = "Email é obrigatório")
-    private String email;
-
-    @Column(nullable = false)
-    @NotBlank(message = "Senha é obrigatória")
-    private String senha;
-
     @Column(nullable = false)
     @NotBlank(message = "CPF é obrigatório")
     @Pattern(regexp = "\\d{11}", message = "CPF deve ter 11 dígitos numéricos")
-  
-
-    @NotBlank(message = "Nome é obrigatório")
-    private String nome;
-
-    @NotBlank(message = "Telefone é obrigatório")
-    @Size(min = 0, max = 11, message = "Telefone deve ter 11 dígitos")
     private String cpf;
 
+    @NotBlank(message = "Telefone é obrigatório")
+    @Size(min = 11, max = 11, message = "Telefone deve ter 11 dígitos")
     private String telefone;
+    
     private String sexo;
     private LocalDate dataNascimento;
 
@@ -53,7 +39,7 @@ public class Profissional extends Usuario {
         this.dataNascimento = dataNascimento;
     }
 
-    // Getters e Setters de Profissional
+    // Getters e Setters
     public String getCpf() { 
         return cpf; 
     }
@@ -78,5 +64,4 @@ public class Profissional extends Usuario {
     public void setDataNascimento(LocalDate dataNascimento) { 
         this.dataNascimento = dataNascimento; 
     }
-
 }

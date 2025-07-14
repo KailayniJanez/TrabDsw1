@@ -24,6 +24,14 @@ public class ProfissionalService {
     }
 
     public Profissional criarProfissional(Profissional profissional) {
+
+        System.out.println("Objeto antes de salvar:");
+        System.out.println("Nome: " + profissional.getNome());
+        System.out.println("Email: " + profissional.getEmail());
+        System.out.println("Senha: " + (profissional.getSenha() != null ? "preenchida" : "null"));
+        System.out.println("CPF: " + profissional.getCpf());
+        System.out.println("Telefone: " + profissional.getTelefone());
+        
         profissional.setSenha(passwordEncoder.encode(profissional.getSenha()));
         // Define a role para o profissional (ROLE_PROFISSIONAL)
         profissional.setRole("ROLE_PROFISSIONAL");

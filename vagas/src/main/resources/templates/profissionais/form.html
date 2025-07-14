@@ -84,11 +84,15 @@
 
             let cpfValue = $('#cpf-hidden').val();
             if (cpfValue && cpfValue.length === 11) {
-                $('#cpf-display').val(cpfValue);
+                $('#cpf-display').val(
+                    cpfValue.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4")
+                );
             }
             let telValue = $('#telefone-hidden').val();
             if (telValue && telValue.length === 11) {
-                $('#telefone-display').val(telValue);
+                $('#telefone-display').val(
+                    telValue.replace(/(\d{2})(\d{5})(\d{4})/, "($1) $2-$3")
+                );
             }
 
             $('#cpf-display').on('input', function(){
@@ -114,6 +118,7 @@
                     $('#cpf-display').removeClass('is-invalid');
                     $('#cpf-hidden').val(cpf);
                 }
+
                 if (tel && tel.length !== 11) {
                     $('#telefone-error').show();
                     $('#telefone-display').addClass('is-invalid');
@@ -123,7 +128,10 @@
                     $('#telefone-display').removeClass('is-invalid');
                     $('#telefone-hidden').val(tel);
                 }
-                if (erro) e.preventDefault();
+
+                if (erro) {
+                    e.preventDefault();
+                }
             });
         });
     </script>

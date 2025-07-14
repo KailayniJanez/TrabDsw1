@@ -6,7 +6,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.Optional;
@@ -59,15 +58,22 @@ public class ProfissionalController {
 
     @PostMapping
     public String salvar(@ModelAttribute Profissional profissional, RedirectAttributes redirectAttributes) {
+
+        System.out.println("CPF recebido: " + profissional.getCpf());
+        System.out.println("Telefone recebido: " + profissional.getTelefone());
+        System.out.println("Email recebido: " + profissional.getEmail());
+
         try {
             if (profissional.getId() == null) {
                 if (profissionalService.buscarProfissionalPorEmail(profissional.getEmail()).isPresent()) {
                     redirectAttributes.addFlashAttribute("errorMessage", "Email já cadastrado.");
                     return "redirect:/admin/profissionais/form"; // Redireciona de volta ao formulário
                 }
+                System.out.println("Chamando criarProfissional...");
                 profissionalService.criarProfissional(profissional);
                 redirectAttributes.addFlashAttribute("successMessage", "Profissional criado com sucesso!");
             } else {
+                System.out.println("Chamando atualizarProfissional...");
                 profissionalService.atualizarProfissional(profissional.getId(), profissional);
                 redirectAttributes.addFlashAttribute("successMessage", "Profissional atualizado com sucesso!");
             }
