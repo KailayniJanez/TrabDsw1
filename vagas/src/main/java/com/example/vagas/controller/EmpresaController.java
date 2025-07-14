@@ -38,6 +38,16 @@ public class EmpresaController {
     @PostMapping
     public String salvar(@Valid @ModelAttribute Empresa empresa, BindingResult result, Model model, RedirectAttributes redirectAttributes) {
         
+
+        System.out.println("=== DEBUG EMPRESA ===");
+        System.out.println("ID: " + empresa.getId());
+        System.out.println("Nome: " + empresa.getNome());
+        System.out.println("Email: " + empresa.getEmail());
+        System.out.println("CNPJ: " + empresa.getCnpj());
+        System.out.println("Cidade: " + empresa.getCidade());
+        System.out.println("Descrição: " + empresa.getDescricao());
+        System.out.println("====================");
+
         if (result.hasErrors()) {
             model.addAttribute("empresa", empresa); 
             return "empresas/form";
