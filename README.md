@@ -79,6 +79,7 @@ O sistema envia e-mails automáticos aos candidatos quando seu status de candida
   - Validação dos dados presentes nos formulários (10)
   - Ajustes nos erros de mensagens e botões
   - Implementação das mensagens de idiomas (inglês e português) (R9)
+  - **Ajustes:** criação da classe  Usuario e  as subclasses Empresa  e Profissional; modficação da interface  JpaRepository para a CrudRepository
 
 
 - **Kailayni Janez:**  

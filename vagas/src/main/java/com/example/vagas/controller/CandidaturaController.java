@@ -1,8 +1,5 @@
 package com.example.vagas.controller;
 
-import com.example.vagas.model.*;
-import com.example.vagas.repository.*;
-import com.example.vagas.service.EmailService;
 import com.example.vagas.model.Candidatura;
 import com.example.vagas.model.Profissional;
 import com.example.vagas.model.Empresa;
@@ -13,7 +10,6 @@ import com.example.vagas.service.ProfissionalService;
 import com.example.vagas.service.VagaService;
 import com.example.vagas.service.EmpresaService;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,7 +17,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
 import java.util.List;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.http.HttpHeaders;

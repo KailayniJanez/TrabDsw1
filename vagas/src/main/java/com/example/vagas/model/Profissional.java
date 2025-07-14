@@ -4,8 +4,6 @@ package com.example.vagas.model;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
-import jakarta.validation.constraints.Past;
-import org.springframework.format.annotation.DateTimeFormat;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.PrimaryKeyJoinColumn;
@@ -39,11 +37,7 @@ public class Profissional extends Usuario {
     private String cpf;
 
     private String telefone;
-
     private String sexo;
-
-    @Past(message = "A data de nascimento deve ser no passado")
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate dataNascimento;
 
     public Profissional() {

@@ -3,14 +3,16 @@ package com.example.vagas.controller;
 import com.example.vagas.model.Empresa;
 import com.example.vagas.service.EmpresaService;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.ui.Model; 
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import jakarta.validation.Valid;
 
 import java.util.Optional;
 
 @Controller
-@RequestMapping("admin/empresas")
+@RequestMapping("/admin/empresas")
 public class EmpresaController {
 
     private final EmpresaService empresaService;
@@ -23,23 +25,30 @@ public class EmpresaController {
     @GetMapping
     public String listar(Model model) {
         model.addAttribute("empresas", empresaService.listarTodasEmpresas());
-        return "empresas/list"; // Retorna o nome da view para listar empresas
+        return "empresas/list";
     }
 
     @GetMapping("/form")
     public String form(Model model) {
         model.addAttribute("empresa", new Empresa());
-        return "empresas/form"; // Retorna o nome da view do formulário
+        return "empresas/form";
     }
 
     // R2: CRUD de empresas - C (Create) / U (Update)
     @PostMapping
-    public String salvar(@ModelAttribute Empresa empresa, RedirectAttributes redirectAttributes) {
+    public String salvar(@Valid @ModelAttribute Empresa empresa, BindingResult result, Model model, RedirectAttributes redirectAttributes) {
+        
+        if (result.hasErrors()) {
+            model.addAttribute("empresa", empresa); 
+            return "empresas/form";
+        }
+
         try {
             if (empresa.getId() == null) {
                 if (empresaService.buscarEmpresaPorEmail(empresa.getEmail()).isPresent()) {
-                    redirectAttributes.addFlashAttribute("errorMessage", "Email já cadastrado.");
-                    return "redirect:/admin/empresas/form"; // Redireciona de volta ao formulário
+                    result.rejectValue("email", "error.empresa", "Email já cadastrado."); 
+                    model.addAttribute("empresa", empresa);
+                    return "empresas/form";
                 }
                 
                 empresaService.criarEmpresa(empresa);
@@ -50,21 +59,22 @@ public class EmpresaController {
             }
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("errorMessage", "Erro ao salvar empresa: " + e.getMessage());
-            return "redirect:/admin/empresas"; // Ou para o formulário dependendo do erro
+            model.addAttribute("empresa", empresa); 
+            return "empresas/form"; // Retornar ao formulário com a mensagem de erro
         }
-        return "redirect:/admin/empresas"; // Redireciona para a lista após salvar
+        return "redirect:/admin/empresas";
     }
 
-    // R2: CRUD de empresas - U (Update): (método de edição, carrega dados para o formulário)
+    // R2: CRUD de empresas - U (Update)
     @GetMapping("/editar/{id}") 
     public String editar(@PathVariable Long id, Model model, RedirectAttributes redirectAttributes) {
         Optional<Empresa> empresaOpt = empresaService.buscarEmpresaPorId(id);
         if (empresaOpt.isPresent()) {
             model.addAttribute("empresa", empresaOpt.get());
-            return "empresas/form"; // Retorna o formulário preenchido para edição
+            return "empresas/form";
         } else {
             redirectAttributes.addFlashAttribute("errorMessage", "Empresa não encontrada para edição.");
-            return "redirect:/admin/empresas"; // Redireciona se não encontrar
+            return "redirect:/admin/empresas";
         }
     }
 
@@ -76,6 +86,6 @@ public class EmpresaController {
         } else {
             redirectAttributes.addFlashAttribute("errorMessage", "Empresa não encontrada para exclusão.");
         }
-        return "redirect:/admin/empresas"; // Redireciona para a lista após exclusão
+        return "redirect:/admin/empresas";
     }
 }
