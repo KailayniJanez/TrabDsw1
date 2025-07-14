@@ -41,15 +41,13 @@
                     
                     <div class="mb-3">
                         <label class="form-label">CPF</label>
-                        <input type="text" class="form-control" th:field="*{cpf}" id="cpf" maxlength="14" required>
-                        <div class="invalid-feedback" id="cpf-error" style="display:none;">CPF inválido. Digite 11 dígitos.</div>
+                        <input type="text" class="form-control" th:field="*{cpf}" id="cpf" required>
                         <div class="invalid-feedback" th:if="${#fields.hasErrors('cpf')}" th:errors="*{cpf}"></div>
                     </div>
                     
                     <div class="mb-3">
                         <label class="form-label">Telefone</label>
-                        <input type="text" class="form-control" th:field="*{telefone}" id="telefone" maxlength="15">
-                        <div class="invalid-feedback" id="telefone-error" style="display:none;">Telefone inválido.</div>
+                        <input type="text" class="form-control" th:field="*{telefone}" id="telefone">
                         <div class="invalid-feedback" th:if="${#fields.hasErrors('telefone')}" th:errors="*{telefone}"></div>
                     </div>
                     
@@ -75,32 +73,30 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
+    
     <script>
-        $(document).ready(function(){
-            $('#cpf').mask('000.000.000-00');
-            $('#telefone').mask('(00) 00000-0000');
-
-            $('form').on('submit', function(e){
-                let cpf = $('#cpf').cleanVal();
-                if (cpf.length !== 11) {
-                    $('#cpf-error').show();
-                    $('#cpf').addClass('is-invalid');
-                    e.preventDefault();
-                } else {
-                    $('#cpf-error').hide();
-                    $('#cpf').removeClass('is-invalid');
-                }
-                let tel = $('#telefone').cleanVal();
-                if (tel && tel.length !== 11) {
-                    $('#telefone-error').show();
-                    $('#telefone').addClass('is-invalid');
-                    e.preventDefault();
-                } else {
-                    $('#telefone-error').hide();
-                    $('#telefone').removeClass('is-invalid');
-                }
-            });
+    $(document).ready(function(){
+        // Máscaras
+        $('#cpf').mask('000.000.000-00', {reverse: false});
+        $('#telefone').mask('(00) 00000-0000');
+        
+        // Validação antes de enviar
+        $('#profissionalForm').submit(function() {
+            const cpf = $('#cpf').cleanVal();
+            if (cpf.length !== 11) {
+                alert('CPF deve ter 11 dígitos!');
+                return false;
+            }
+            
+            const telefone = $('#telefone').cleanVal();
+            if (telefone && telefone.length !== 11) {
+                alert('Telefone deve ter 11 dígitos (com DDD)!');
+                return false;
+            }
+            
+            return true;
         });
+    });
     </script>
 </body>
 </html>

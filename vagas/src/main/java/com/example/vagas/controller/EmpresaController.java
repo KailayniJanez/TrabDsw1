@@ -2,11 +2,15 @@ package com.example.vagas.controller;
 
 import com.example.vagas.model.Empresa;
 import com.example.vagas.repository.EmpresaRepository;
+import java.beans.PropertyEditorSupport;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.validation.BindingResult;
+import jakarta.validation.Valid;
 
 @Controller
 @RequestMapping("admin/empresas")
@@ -18,9 +22,35 @@ public class EmpresaController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @InitBinder
+    public void initBinder(WebDataBinder binder) {
+        binder.registerCustomEditor(String.class, "cnpj", new PropertyEditorSupport() {
+            @Override
+            public void setAsText(String text) {
+                if (text != null && !text.isEmpty()) {
+                    String cnpjLimpo = text.replaceAll("\\D", "");
+                    if (cnpjLimpo.length() == 14) {
+                        String cnpjFormatado = cnpjLimpo.replaceAll("(\\d{2})(\\d{3})(\\d{3})(\\d{4})(\\d{2})", "$1.$2.$3/$4-$5");
+                        setValue(cnpjFormatado);
+                    } else {
+                        setValue(text);
+                    }
+                } else {
+                    setValue(null);
+                }
+            }
+            
+            @Override
+            public String getAsText() {
+                return (String) getValue();
+            }
+        });
+    }
+
     @GetMapping("/list")
     public String listar(Model model) {
-        model.addAttribute("empresas", empresaRepository.findAll());
+        Iterable<Empresa> empresas = empresaRepository.findAll();
+        model.addAttribute("empresas", empresas);
         return "empresas/list";
     }
 
@@ -31,7 +61,12 @@ public class EmpresaController {
     }
 
     @PostMapping
-    public String salvar(@ModelAttribute Empresa empresa) {
+    public String salvar(@Valid @ModelAttribute Empresa empresa, BindingResult result, Model model) {
+        if (result.hasErrors()) {
+            model.addAttribute("empresa", empresa);
+            return "empresas/form";
+        }
+
         if (empresa.getId() == null) {
             empresa.setSenha(passwordEncoder.encode(empresa.getSenha()));
         } else {

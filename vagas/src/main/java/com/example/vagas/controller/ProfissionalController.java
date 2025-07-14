@@ -2,10 +2,12 @@ package com.example.vagas.controller;
 
 import com.example.vagas.model.Profissional;
 import com.example.vagas.repository.ProfissionalRepository;
+import java.beans.PropertyEditorSupport;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.validation.BindingResult;
 import jakarta.validation.Valid;
@@ -20,9 +22,57 @@ public class ProfissionalController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @InitBinder
+    public void initBinder(WebDataBinder binder) {
+        binder.registerCustomEditor(String.class, "cpf", new PropertyEditorSupport() {
+            @Override
+            public void setAsText(String text) {
+                if (text != null && !text.isEmpty()) {
+                    String cpfLimpo = text.replaceAll("\\D", "");
+                    if (cpfLimpo.length() == 11) {
+                        String cpfFormatado = cpfLimpo.replaceAll("(\\d{3})(\\d{3})(\\d{3})(\\d{2})", "$1.$2.$3-$4");
+                        setValue(cpfFormatado);
+                    } else {
+                        setValue(text);
+                    }
+                } else {
+                    setValue(null);
+                }
+            }
+            
+            @Override
+            public String getAsText() {
+                return (String) getValue();
+            }
+        });
+
+        binder.registerCustomEditor(String.class, "telefone", new PropertyEditorSupport() {
+            @Override
+            public void setAsText(String text) {
+                if (text != null && !text.isEmpty()) {
+                    String telLimpo = text.replaceAll("\\D", "");
+                    if (telLimpo.length() == 11) {
+                        String telFormatado = telLimpo.replaceAll("(\\d{2})(\\d{5})(\\d{4})", "($1) $2-$3");
+                        setValue(telFormatado);
+                    } else {
+                        setValue(text);
+                    }
+                } else {
+                    setValue(null);
+                }
+            }
+            
+            @Override
+            public String getAsText() {
+                return (String) getValue();
+            }
+        });
+    }
+
     @GetMapping
     public String listar(Model model) {
-        model.addAttribute("profissionais", profissionalRepository.findAll());
+        Iterable<Profissional> profissionais = profissionalRepository.findAll();
+        model.addAttribute("profissionais", profissionais);
         return "profissionais/list";
     }
 

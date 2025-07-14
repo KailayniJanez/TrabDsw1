@@ -13,6 +13,8 @@ import org.springframework.web.server.ResponseStatusException;
 import org.springframework.http.HttpStatus;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @Controller
 @RequestMapping("/vagas")
@@ -24,11 +26,17 @@ public class VagaController {
     @Autowired
     private EmpresaService empresaService;
 
+    // Método auxiliar para converter Iterable para List
+    private <T> List<T> toList(Iterable<T> iterable) {
+        return StreamSupport.stream(iterable.spliterator(), false)
+                          .collect(Collectors.toList());
+    }
+
     @GetMapping("/listagem")
     public String listarVagasPublicas(Model model, 
                                     @RequestParam(required = false) String cidade) {
         try {
-            List<Vaga> vagas;
+            Iterable<Vaga> vagas;
             
             if (cidade != null && !cidade.isEmpty()) {
                 vagas = vagaRepository.findByEmpresaCidadeAndDataLimiteInscricaoGreaterThanEqual(
@@ -39,14 +47,16 @@ public class VagaController {
                 vagas = vagaRepository.findByDataLimiteInscricaoGreaterThanEqual(LocalDate.now());
             }
             
-            if (vagas.isEmpty()) {
+            List<Vaga> listaVagas = toList(vagas);
+            
+            if (listaVagas.isEmpty()) {
                 model.addAttribute("mensagem", 
                     cidade != null ? 
                     "Nenhuma vaga disponível em " + cidade : 
                     "Nenhuma vaga disponível no momento");
             }
             
-            model.addAttribute("vagas", vagas);
+            model.addAttribute("vagas", listaVagas);
             return "vagas/listagem";
             
         } catch (Exception e) {
@@ -59,13 +69,15 @@ public class VagaController {
     public String indexEmpresa(Model model, Authentication authentication) {
         try {
             Empresa empresa = empresaService.buscarPorUsuario(authentication.getName());
-            List<Vaga> vagas = vagaRepository.findByEmpresaAndDataLimiteInscricaoGreaterThanEqual(empresa, LocalDate.now());
+            Iterable<Vaga> vagas = vagaRepository.findByEmpresaAndDataLimiteInscricaoGreaterThanEqual(empresa, LocalDate.now());
             
-            if (vagas.isEmpty()) {
+            List<Vaga> listaVagas = toList(vagas);
+            
+            if (listaVagas.isEmpty()) {
                 model.addAttribute("mensagem", "Nenhuma vaga cadastrada ou ativa");
             }
             
-            model.addAttribute("vagas", vagas);
+            model.addAttribute("vagas", listaVagas);
             return "vagas/index";
             
         } catch (Exception e) {

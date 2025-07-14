@@ -32,28 +32,32 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http
-            .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/", "/login", "/vagas/listagem", "/css/**", "/js/**").permitAll()
-                .requestMatchers(HttpMethod.POST, "/admin/empresas").hasRole("ADMIN")
-                .requestMatchers("/admin/**").hasRole("ADMIN")
-                .requestMatchers("/vagas/**").hasRole("EMPRESA")
-                .requestMatchers("/profissional/**").hasRole("PROFISSIONAL")
-                .anyRequest().authenticated()
-            )
-            .formLogin(form -> form
-                .loginPage("/login")
-                .successHandler(successHandler)
-                .permitAll()
-            )
-            .logout(logout -> logout
-                .logoutSuccessUrl("/?logout")
-                .permitAll()
-            );
+public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    http
+        .authorizeHttpRequests(auth -> auth
+            .requestMatchers("/", "/login", "/vagas/listagem", "/css/**", "/js/**").permitAll()
+            .requestMatchers("/api/**").permitAll() // Permite acesso sem autenticação às APIs
+            .requestMatchers(HttpMethod.POST, "/admin/empresas").hasRole("ADMIN")
+            .requestMatchers("/admin/**").hasRole("ADMIN")
+            .requestMatchers("/vagas/**").hasRole("EMPRESA")
+            .requestMatchers("/profissional/**").hasRole("PROFISSIONAL")
+            .anyRequest().authenticated()
+        )
+        .csrf(csrf -> csrf
+            .ignoringRequestMatchers("/api/**") // Desabilita CSRF para APIs
+        )
+        .formLogin(form -> form
+            .loginPage("/login")
+            .successHandler(successHandler)
+            .permitAll()
+        )
+        .logout(logout -> logout
+            .logoutSuccessUrl("/?logout")
+            .permitAll()
+        );
 
-        return http.build();
-    }
+    return http.build();
+}
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
